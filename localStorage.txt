@@ -1,0 +1,95 @@
+// localStorageUtils.js
+
+// Save data to localStorage
+export const saveToLocalStorage = (key, value) => {
+  try {
+    const data = JSON.stringify(value);  // Convert the data to a string (JSON)
+    localStorage.setItem(key, data);  // Store it in localStorage
+  } catch (error) {
+    console.error("Error saving to localStorage", error);
+  }
+};
+
+// Get data from localStorage
+export const getFromLocalStorage = (key) => {
+  try {
+    const data = localStorage.getItem(key);  // Retrieve the data
+    return data ? JSON.parse(data) : null;  // Parse it back into an object, or return null if not found
+  } catch (error) {
+    console.error("Error retrieving from localStorage", error);
+    return null;
+  }
+};
+
+// Remove data from localStorage
+export const removeFromLocalStorage = (key) => {
+  try {
+    localStorage.removeItem(key);  // Remove the item by its key
+  } catch (error) {
+    console.error("Error removing from localStorage", error);
+  }
+};
+
+
+/////////////////////////////////////////////////////
+In your main component (e.g., App.js or LineGraph.js), we will integrate localStorage functionality to save and load expense data:
+
+
+import React, { useState, useEffect } from "react";
+import LineGraph from "./components/LineGraph";
+import { saveToLocalStorage, getFromLocalStorage } from "./localStorageUtils";
+
+function App() {
+  // Initialize state with data from localStorage or default data
+  const [monthlyExpenses, setMonthlyExpenses] = useState(() => {
+    const storedExpenses = getFromLocalStorage("monthlyExpenses");
+    return storedExpenses || {
+      labels: ["Groceries", "Rent", "Transportation", "Miscellaneous", "Eating Out"],
+      datasets: [
+        {
+          label: "Amount",
+          data: [1000, 5000, 10000, 15000, 20000],
+          borderColor: "red",
+        },
+      ],
+    };
+  });
+
+  // Update the localStorage whenever the monthlyExpenses state changes
+  useEffect(() => {
+    saveToLocalStorage("monthlyExpenses", monthlyExpenses);
+  }, [monthlyExpenses]);
+
+  const handleAddExpense = (category, amount) => {
+    const newExpenses = { ...monthlyExpenses };
+    newExpenses.labels.push(category);
+    newExpenses.datasets[0].data.push(amount);
+
+    setMonthlyExpenses(newExpenses);  // This will automatically save to localStorage due to useEffect
+  };
+
+  return (
+    <div>
+      <h1>Expense Tracker</h1>
+      <LineGraph data={monthlyExpenses} />
+      <button onClick={() => handleAddExpense("Entertainment", 3000)}>Add Entertainment</button>
+    </div>
+  );
+}
+
+export default App;
+//////////////////////////
+
+
+You can also store other information like budget data or a user's preferences. For instance, if you want to store a user’s budget for each category, you can follow a similar process.
+
+
+// Save the user's budget data
+const saveBudgetData = (budget) => {
+  saveToLocalStorage("userBudget", budget);
+};
+
+// Get the user's budget data
+const getBudgetData = () => {
+  return getFromLocalStorage("userBudget");
+};
