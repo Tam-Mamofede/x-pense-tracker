@@ -1,14 +1,12 @@
-import React from "react";
-import { auth, googleProvider, db } from "./Config/firebase.config";
+import React, { useState } from "react";
+import SignUp from "./src/components/SignUp";
+import { AuthProvider } from "./src/Contexts/AuthContext";
 
 function App() {
   return (
-    <div>
-      <label>Enter your email</label>
-      <input type="text" />
-      <label>Enter your password</label>
-      <input type="password" />
-    </div>
+    <AuthProvider>
+      <SignUp />
+    </AuthProvider>
   );
 }
 
