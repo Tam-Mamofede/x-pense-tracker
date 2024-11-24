@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { auth, googleProvider, db } from "../../Config/firebase.config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
@@ -13,7 +13,7 @@ function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   //sign up with email and password
-  const signUp = async () => {
+  const createAccount = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -45,6 +45,21 @@ function AuthProvider({ children }) {
     }
   };
 
+  //sign in with google account
+
+  const createAccountWithGoogle = async () => {
+    try {
+      const googleCredential = await signInWithPopup(auth, googleProvider);
+      newUser = googleCredential.user;
+      setUser(newUser);
+      setIsAuthenticated(true);
+      console.log(newUser);
+      //   setUserName(newUser.display)
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div>
       <AuthContext.Provider
@@ -59,7 +74,8 @@ function AuthProvider({ children }) {
           setUser,
           isAuthenticated,
           setIsAuthenticated,
-          signUp,
+          createAccount,
+          createAccountWithGoogle,
         }}
       >
         {children}

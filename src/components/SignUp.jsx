@@ -9,8 +9,9 @@ function SignUp() {
     email,
     password,
     setPassword,
-    signUp,
+    createAccount,
     isAuthenticated,
+    createAccountWithGoogle,
   } = useAuth();
 
   return (
@@ -35,7 +36,8 @@ function SignUp() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={signUp}>Sign up</button>
+          <button onClick={createAccount}>Sign up</button>
+          <button onClick={createAccountWithGoogle}>Google</button>
         </>
       )}
       {isAuthenticated && <p>You've done it {userName}</p>}
