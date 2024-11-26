@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 import { auth, googleProvider, db } from "../../Config/firebase.config";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -11,6 +12,7 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState();
   const [userName, setUserName] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
   //sign up with email and password
   const createAccount = async () => {
@@ -31,7 +33,7 @@ function AuthProvider({ children }) {
       });
 
       setUser(newUser);
-
+      navigate("/dashboard");
       const userDocRef = doc(db, "users", newUser.uid); //getting the newly created document under ' users' collection
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
@@ -60,7 +62,7 @@ function AuthProvider({ children }) {
 
       setUser(newUser);
       setIsAuthenticated(true);
-
+      navigate("/dashboard");
       const userDocRef = doc(db, "users", newUser.uid); //getting the newly created document under ' users' collection
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {

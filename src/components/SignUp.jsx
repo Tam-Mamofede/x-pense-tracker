@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth } from "../Contexts/AuthContext";
+import { NavLink } from "react-router-dom";
 
 function SignUp() {
   const {
@@ -44,7 +45,10 @@ function SignUp() {
         <p>You've done it {userName}</p>
       ) : (
         <p>
-          Already have an account? <span>Log in</span>
+          Already have an account?{" "}
+          <span>
+            <NavLink to="/log-in">Log in</NavLink>
+          </span>
         </p>
       )}
     </div>
