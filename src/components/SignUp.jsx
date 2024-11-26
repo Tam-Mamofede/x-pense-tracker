@@ -41,16 +41,12 @@ function SignUp() {
           <button onClick={createAccountWithGoogle}>Google</button>
         </>
       )}
-      {isAuthenticated ? (
-        <p>You've done it {userName}</p>
-      ) : (
-        <p>
-          Already have an account?{" "}
-          <span>
-            <NavLink to="/log-in">Log in</NavLink>
-          </span>
-        </p>
-      )}
+      <p>
+        Already have an account?
+        <span>
+          <NavLink to="/log-in">Log in</NavLink>
+        </span>
+      </p>
     </div>
   );
 }
