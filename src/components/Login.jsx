@@ -13,11 +13,7 @@ function Login() {
   const logIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
-
-      // Firebase authentication is successful if we reach this point
       setIsAuthenticated(true);
-
-      // Navigate to dashboard
       navigate("/dashboard");
     } catch (err) {
       console.error("Login Error:", err.message);

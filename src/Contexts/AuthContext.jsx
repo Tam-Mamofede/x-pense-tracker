@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth, googleProvider, db } from "../../Config/firebase.config";
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
@@ -13,9 +14,9 @@ const AuthContext = createContext();
 function AuthProvider({ children }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState();
   const [userName, setUserName] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   //sign up with email and password
@@ -91,6 +92,20 @@ function AuthProvider({ children }) {
     }
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setUser(firebaseUser);
+      if (firebaseUser) {
+        const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+        setUserData(userDoc.data());
+      } else {
+        setUserData(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div>
       <AuthContext.Provider
@@ -124,19 +139,3 @@ function useAuth() {
 }
 
 export { AuthProvider, useAuth };
-
-//   const handleSubmitName =  () => {
-//     setUserName();
-//     const addUserNameToDocument = async (docId) => {
-//       try {
-//         await firestore.collection("users").doc(docId).update({
-//           userName: userName,
-//         });
-//         console.log("Field added successfully!");
-//       } catch (error) {
-//         console.error("Error adding field: ", error);
-//       }
-//       addUserNameToDocument()
-//     };
-
-//   };
