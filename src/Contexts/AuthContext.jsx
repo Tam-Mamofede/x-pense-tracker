@@ -49,12 +49,24 @@ function AuthProvider({ children }) {
 
   const createAccountWithGoogle = async () => {
     try {
-      const googleCredential = await signInWithPopup(auth, googleProvider);
-      newUser = googleCredential.user;
+      const userCredential = await signInWithPopup(auth, googleProvider);
+      const newUser = userCredential.user;
+
+      //try to store it in Firestore
+      setDoc(doc(db, "users", newUser.uid), {
+        email: newUser.email,
+        name: userName,
+      });
+
       setUser(newUser);
       setIsAuthenticated(true);
-      console.log(newUser);
-      //   setUserName(newUser.display)
+
+      const userDocRef = doc(db, "users", newUser.uid); //getting the newly created document under ' users' collection
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data(); // get user data from new document
+        console.log(userData);
+      }
     } catch (err) {
       console.error(err);
     }

@@ -40,7 +40,13 @@ function SignUp() {
           <button onClick={createAccountWithGoogle}>Google</button>
         </>
       )}
-      {isAuthenticated && <p>You've done it {userName}</p>}
+      {isAuthenticated ? (
+        <p>You've done it {userName}</p>
+      ) : (
+        <p>
+          Already have an account? <span>Log in</span>
+        </p>
+      )}
     </div>
   );
 }
