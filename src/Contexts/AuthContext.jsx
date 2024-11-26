@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useState } from "react";
 import { auth, googleProvider, db } from "../../Config/firebase.config";
-import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
@@ -74,6 +78,19 @@ function AuthProvider({ children }) {
     }
   };
 
+  const logOut = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      setIsAuthenticated(false);
+      alert("You have successfully logged out.");
+
+      navigate("/sign-up");
+    } catch (err) {
+      console.error("Logout Error:", err.message);
+    }
+  };
+
   return (
     <div>
       <AuthContext.Provider
@@ -90,6 +107,7 @@ function AuthProvider({ children }) {
           setIsAuthenticated,
           createAccount,
           createAccountWithGoogle,
+          logOut,
         }}
       >
         {children}
