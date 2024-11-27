@@ -104,16 +104,16 @@ function BudgetProvider({ children }) {
     { code: "NGN", symbol: "₦" },
   ];
 
-  const formatAmount = (amount, currencySymbol) => {
+  const formatAmount = (amount, currencyCode) => {
     if (!amount || isNaN(amount)) return;
 
-    // Ensure a valid currency symbol is provided
-    const validCurrency = currencySymbol || "₦"; // Default to NGN if not provided
+    // Ensure a valid currency code is provided (e.g., 'NGN', 'USD')
+    const validCurrencyCode = currencyCode || "NGN"; // Default to NGN if not provided
 
     return new Intl.NumberFormat("en-US", {
       style: "currency",
+      currency: validCurrencyCode, // Use the valid currency code (e.g., 'NGN', 'USD')
       currencyDisplay: "symbol", // Display the symbol
-      currency: validCurrency, // Use the valid currency symbol
     }).format(amount);
   };
 
