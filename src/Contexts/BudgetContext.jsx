@@ -95,18 +95,21 @@ function BudgetProvider({ children }) {
     }
   }, [user]);
 
-  const handleDeleteEntry = async () => {
+  const handleDeleteEntry = async (budgetId) => {
     try {
-      const budgetDocRef = doc(
-        db,
-        `users/${user.uid}/budgets`,
-        `${month}-${category}`
-      );
-      // Remove budget items from the "budgets" docs
+      if (!user) {
+        alert("You must be logged in to delete a budget.");
+        return;
+      }
+
+      const budgetDocRef = doc(db, `users/${user.uid}/budgets`, budgetId);
       await deleteDoc(budgetDocRef);
-      console.log("Budget deleted successfully!");
+
+      setBudgets((prev) => prev.filter((budget) => budget.id !== budgetId));
+      alert("Budget deleted successfully!");
     } catch (error) {
       console.error("Error deleting budget:", error);
+      alert("Failed to delete the budget. Please try again.");
     }
   };
 
