@@ -92,14 +92,18 @@ function AuthProvider({ children }) {
     }
   };
 
+  // Monitor auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setUser(firebaseUser);
       if (firebaseUser) {
         const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
-        setUserData(userDoc.data());
+        if (userDoc.exists()) {
+          setUser({ ...firebaseUser, ...userDoc.data() });
+          setIsAuthenticated(true);
+        }
       } else {
-        setUserData(null);
+        setUser(null);
+        setIsAuthenticated(false);
       }
     });
 

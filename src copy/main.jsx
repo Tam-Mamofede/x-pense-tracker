@@ -1,19 +1,16 @@
 import React from "react";
 import { StrictMode } from "react";
-import { create, Root } from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "../App.jsx";
 import { AuthProvider } from "./Contexts/AuthContext.jsx";
-import { BudgetProvider } from "./Contexts/BudgetContext.jsx";
+import App from "../App.jsx";
 import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true }}>
       <AuthProvider>
-        <BudgetProvider>
-          <App />
-        </BudgetProvider>
+        <App />
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>
