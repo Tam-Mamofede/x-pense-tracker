@@ -21,6 +21,20 @@ function BudgetProvider({ children }) {
   const [budgets, setBudgets] = useState([]);
   const [currency, setCurrency] = useState("NGN");
 
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   // Function to store a budget in Firestore
   const handleStoreBudget = async () => {
     try {
@@ -145,6 +159,7 @@ function BudgetProvider({ children }) {
         budgets,
         handleStoreBudget,
         handleDeleteEntry,
+        monthNames,
       }}
     >
       {children}

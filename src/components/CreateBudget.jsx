@@ -1,22 +1,8 @@
 import React from "react";
 import { useBudget } from "../Contexts/BudgetContext";
+import Budget from "./Budget";
 
 function CreateBudget() {
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
   const {
     month,
     setMonth,
@@ -27,6 +13,7 @@ function CreateBudget() {
     handleStoreBudget,
     budgets,
     handleDeleteEntry,
+    monthNames,
   } = useBudget();
 
   // Format the current selected month (if it's a valid month string)
@@ -73,33 +60,8 @@ function CreateBudget() {
           Submit budget for {month}
         </button>
       </div>
-
       <div>
-        <h1>Here is your budget for {formattedMonth}</h1>
-
-        {budgets.length === 0 ? (
-          <p>No budgets found.</p>
-        ) : (
-          budgets.map((budget) => {
-            // Get the month part from the budget (e.g., "2024-12" -> "12")
-            const monthNumber = parseInt(budget.month.split("-")[1], 10);
-            // Map to the full month name using the monthNames array
-            const formattedMonth = monthNames[monthNumber - 1];
-
-            return (
-              <div key={budget.id}>
-                <ul>
-                  <li>
-                    {budget.category} : {budget.amount}
-                    <button onClick={() => handleDeleteEntry(budget.id)}>
-                      Delete entry
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            );
-          })
-        )}
+        <Budget />
       </div>
     </>
   );
