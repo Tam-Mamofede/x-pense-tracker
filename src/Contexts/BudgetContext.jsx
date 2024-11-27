@@ -6,6 +6,7 @@ import {
   getDoc,
   deleteDoc,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../Config/firebase.config";
 import { useAuth } from "./AuthContext";
@@ -94,28 +95,40 @@ function BudgetProvider({ children }) {
     }
   }, [user]);
 
-  // Currency options
-  const currencies = [
-    { code: "USD", symbol: "$" },
-    { code: "EUR", symbol: "€" },
-    { code: "GBP", symbol: "£" },
-    { code: "INR", symbol: "₹" },
-    { code: "JPY", symbol: "¥" },
-    { code: "NGN", symbol: "₦" },
-  ];
-
-  const formatAmount = (amount, currencySymbol) => {
-    if (!amount || isNaN(amount)) return;
-
-    // Ensure a valid currency symbol is provided
-    const validCurrency = currencySymbol || "₦"; // Default to NGN if not provided
-
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currencyDisplay: "symbol", // Display the symbol
-      currency: validCurrency, // Use the valid currency symbol
-    }).format(amount);
+  const handleDeleteEntry = async () => {
+    try {
+      const budgetDocRef = doc(
+        db,
+        `users/${user.uid}/budgets`,
+        `${month}-${category}`
+      );
+      // Remove budget items from the "budgets" docs
+      await deleteDoc(budgetDocRef);
+      console.log("Budget deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting budget:", error);
+    }
   };
+
+  // Currency options
+  // const currencies = [
+  //   { code: "USD", symbol: "$" },
+  //   { code: "EUR", symbol: "€" },
+  //   { code: "GBP", symbol: "£" },
+  //   { code: "INR", symbol: "₹" },
+  //   { code: "JPY", symbol: "¥" },
+  //   { code: "NGN", symbol: "₦" },
+  // ];
+
+  // const formatAmount = (amount, currencyCode) => {
+  //   if (!amount || isNaN(amount)) return;
+
+  //   return new Intl.NumberFormat("en-US", {
+  //     style: "currency",
+  //     currency: currencyCode, // Use the currency code for formatting
+  //     currencyDisplay: "symbol", // Ensures it shows the symbol
+  //   }).format(amount);
+  // };
 
   return (
     <BudgetContext.Provider
@@ -128,10 +141,7 @@ function BudgetProvider({ children }) {
         setCategory,
         budgets,
         handleStoreBudget,
-        formatAmount,
-        currency,
-        setCurrency,
-        currencies,
+        handleDeleteEntry,
       }}
     >
       {children}

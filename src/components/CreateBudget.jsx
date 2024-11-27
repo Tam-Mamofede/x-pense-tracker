@@ -26,10 +26,7 @@ function CreateBudget() {
     setCategory,
     handleStoreBudget,
     budgets,
-    currency,
-    setCurrency,
-    currencies,
-    formatAmount,
+    handleDeleteEntry,
   } = useBudget();
 
   // Format the current selected month (if it's a valid month string)
@@ -72,15 +69,6 @@ function CreateBudget() {
           onChange={(e) => setAmount(e.target.value)}
         />
 
-        <label htmlFor="currency">Currency</label>
-        <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
-          {currencies.map((currencyOption) => (
-            <option key={currencyOption.code} value={currencyOption.symbol}>
-              {currencyOption.symbol} {currencyOption.code}
-            </option>
-          ))}
-        </select>
-
         <button onClick={handleStoreBudget} disabled={!isFormValid}>
           Submit budget for {month}
         </button>
@@ -102,8 +90,10 @@ function CreateBudget() {
               <div key={budget.id}>
                 <ul>
                   <li>
-                    {budget.category} : {currency}
-                    {budget.amount}
+                    {budget.category} : {budget.amount}
+                    <button onClick={() => handleDeleteEntry(budget.id)}>
+                      Delete entry
+                    </button>
                   </li>
                 </ul>
               </div>
