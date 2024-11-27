@@ -1,5 +1,6 @@
 import React from "react";
 import { useBudget } from "../Contexts/BudgetContext";
+import { NavLink } from "react-router-dom";
 
 function Budget() {
   const { month, amount, category, budgets, handleDeleteEntry, monthNames } =
@@ -16,7 +17,10 @@ function Budget() {
   return (
     <div>
       {budgets.length === 0 ? (
-        <p>No budgets found.</p>
+        <p>
+          No budgets found.{" "}
+          <NavLink to="/create-budget">Start your budget</NavLink>
+        </p>
       ) : (
         budgets.map((budget) => {
           // Get the month part from the budget (e.g., "2024-12" -> "12")
