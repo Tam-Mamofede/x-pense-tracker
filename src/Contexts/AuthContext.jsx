@@ -110,6 +110,18 @@ function AuthProvider({ children }) {
     return () => unsubscribe();
   }, []);
 
+  // const testFetch = async () => {
+  //   const docRef = doc(db, `users/${user.uid}/budgets`); // Replace user-id
+  //   const docSnap = await getDoc(docRef);
+
+  //   if (docSnap.exists()) {
+  //     console.log("Document Data:", docSnap.data());
+  //   } else {
+  //     console.log("No such document!");
+  //   }
+  // };
+  // testFetch();
+
   return (
     <div>
       <AuthContext.Provider

@@ -20,6 +20,8 @@ function BudgetProvider({ children }) {
   const [category, setCategory] = useState("");
   const [budgets, setBudgets] = useState([]);
   const [currency, setCurrency] = useState("NGN");
+  // const [savedMonth, setSavedMonth] = useState();
+  const [finalMonth, setFinalMonth] = useState("");
 
   const monthNames = [
     "January",
@@ -109,6 +111,62 @@ function BudgetProvider({ children }) {
     }
   }, [user]);
 
+  // useEffect(() => {
+  //   const getFinalMonth = async () => {
+  //     try {
+  //       const id = `${month}-${category}`;
+  //       const docRef = doc(db, `users/${user.uid}/budgets`, id);
+  //       const docSnap = await getDoc(docRef);
+
+  //       if (docSnap.exists()) {
+  //         const savedMonth = docSnap.data().month; // Adjust based on your Firestore document structure
+  //         const monthNumber = parseInt(savedMonth.split("-")[1], 10); // Assuming "month" is in "YYYY-MM" format
+  //         const monthNames = [
+  //           "January",
+  //           "February",
+  //           "March",
+  //           "April",
+  //           "May",
+  //           "June",
+  //           "July",
+  //           "August",
+  //           "September",
+  //           "October",
+  //           "November",
+  //           "December",
+  //         ];
+
+  //         setFinalMonth(monthNames[monthNumber - 1]);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching month data:", err);
+  //     }
+  //   };
+
+  //   getFinalMonth();
+  // }, [db, user, month, category]);
+
+  // useEffect(() => {
+  //   const getFinalMonth = async () => {
+  //     try {
+  //       const id = `${month}-${category}`;
+  //       const docRef = doc(db, `users/${user.uid}/budgets`, id);
+  //       const docSnap = await getDoc(docRef);
+
+  //       if (docSnap.exists()) {
+  //         setSavedMonth(id.month);
+
+  //         monthNames[parseInt(savedMonth.split("-")[1], 10) - 1];
+  //         setFinalMonth(monthNames[monthNumber - 1]);
+  //       }
+
+  //       getFinalMonth();
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+  // });
+
   const handleDeleteEntry = async (budgetId) => {
     try {
       if (!user) {
@@ -160,6 +218,7 @@ function BudgetProvider({ children }) {
         handleStoreBudget,
         handleDeleteEntry,
         monthNames,
+        finalMonth,
       }}
     >
       {children}

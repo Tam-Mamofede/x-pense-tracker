@@ -6,13 +6,16 @@ import { AuthProvider } from "./Contexts/AuthContext.jsx";
 import App from "../App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { BudgetProvider } from "./Contexts/BudgetContext.jsx";
+import { ExpenseProvider } from "./Contexts/ExpenseContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter future={{ v7_startTransition: true }}>
       <AuthProvider>
         <BudgetProvider>
-          <App />
+          <ExpenseProvider>
+            <App />
+          </ExpenseProvider>
         </BudgetProvider>
       </AuthProvider>
     </BrowserRouter>
