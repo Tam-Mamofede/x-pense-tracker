@@ -24,7 +24,7 @@ function Budget() {
   return (
     <>
       <div>
-        <h1>This is your budget</h1>
+        <h1>This is your budget for {month}</h1>
       </div>
       <div>
         {budgets.length === 0 ? (
