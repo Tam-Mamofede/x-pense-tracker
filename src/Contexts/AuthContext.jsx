@@ -18,6 +18,7 @@ function AuthProvider({ children }) {
   const [userName, setUserName] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState("");
   const navigate = useNavigate();
 
   const [logInEmail, setLogInEmail] = useState("");
@@ -102,6 +103,8 @@ function AuthProvider({ children }) {
       await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
       setIsAuthenticated(true);
       setUser(auth.currentUser);
+
+      setSelectedMonth(prompt("Which month do you want to see?"));
       navigate("/dashboard");
     } catch (err) {
       console.error("Login Error:", err.message);
@@ -175,6 +178,7 @@ function AuthProvider({ children }) {
           setLogInEmail,
           logInPassword,
           setLogInPassword,
+          selectedMonth,
         }}
       >
         {children}

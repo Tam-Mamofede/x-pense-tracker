@@ -26,6 +26,7 @@ function CreateBudget() {
       <div>
         <h1>Start spending wisely</h1>
         <p>Create your budget for the month below</p>
+
         <label htmlFor="month">Month</label>
         <input
           type="text"
