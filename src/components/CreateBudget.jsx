@@ -10,7 +10,7 @@ function CreateBudget() {
     setAmount,
     category,
     setCategory,
-    handleStoreBudget,
+    handleSetBudget,
     isMonth,
     handleSetMonth,
   } = useBudget();
@@ -51,7 +51,7 @@ function CreateBudget() {
             onChange={(e) => setAmount(e.target.value)}
           />
 
-          <button onClick={handleStoreBudget} disabled={!isFormValid}>
+          <button onClick={handleSetBudget} disabled={!isFormValid}>
             Submit budget for {month}
           </button>
         </div>

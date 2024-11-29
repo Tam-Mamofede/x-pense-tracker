@@ -1,25 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAuth } from "../Contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../Config/firebase.config";
 
 function Login() {
-  const [logInEmail, setLogInEmail] = useState("");
-  const [logInPassword, setLogInPassword] = useState("");
-  const { setIsAuthenticated, createAccountWithGoogle } = useAuth(); // Remove unnecessary destructured values
-  const navigate = useNavigate();
-
-  const logIn = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
-      setIsAuthenticated(true);
-      navigate("/dashboard");
-    } catch (err) {
-      console.error("Login Error:", err.message);
-      alert("Login failed: " + err.message);
-    }
-  };
+  const {
+    createAccountWithGoogle,
+    logIn,
+    logInEmail,
+    setLogInEmail,
+    logInPassword,
+    setLogInPassword,
+  } = useAuth();
 
   return (
     <div>

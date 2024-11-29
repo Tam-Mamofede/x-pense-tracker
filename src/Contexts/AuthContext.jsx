@@ -3,6 +3,7 @@ import { auth, googleProvider, db } from "../../Config/firebase.config";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
@@ -19,6 +20,8 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  const [logInEmail, setLogInEmail] = useState("");
+  const [logInPassword, setLogInPassword] = useState("");
   //sign up with email and password
   const createAccount = async () => {
     try {
@@ -92,23 +95,51 @@ function AuthProvider({ children }) {
     }
   };
 
-  // Monitor auth state
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
-        if (userDoc.exists()) {
-          setUser({ ...firebaseUser, ...userDoc.data() });
-          setIsAuthenticated(true);
-        }
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
-    });
+  ///////////////////////////////////////////
 
-    return () => unsubscribe();
-  }, []);
+  const logIn = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
+      setIsAuthenticated(true);
+      setUser(auth.currentUser);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Login Error:", err.message);
+      alert("Login failed: " + err.message);
+    }
+  };
+
+  //Monitor auth state
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+  //     if (firebaseUser) {
+  //       try {
+  //         // Fetch user data from Firestore
+  //         const userDocRef = doc(db, "users", firebaseUser.uid);
+  //         const userDoc = await getDoc(userDocRef);
+
+  //         if (userDoc.exists()) {
+  //           // Combine Firebase Auth data with Firestore data
+  //           // setUser({ uid: firebaseUser.uid, ...userDoc.data() });
+  //           setIsAuthenticated(true);
+  //         } else {
+  //           console.error("User document not found in Firestore.");
+  //           setUser(firebaseUser); // At least set the basic Firebase Auth user data
+  //           setIsAuthenticated(true);
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching user document:", error.message);
+  //       }
+  //     } else {
+  //       // No user is logged in
+  //       setUser(null);
+  //       setIsAuthenticated(false);
+  //     }
+  //   });
+
+  // //Cleanup the subscription on component unmount
+  //   return () => unsubscribe();
+  // }, []);
 
   // const testFetch = async () => {
   //   const docRef = doc(db, `users/${user.uid}/budgets`); // Replace user-id
@@ -139,6 +170,11 @@ function AuthProvider({ children }) {
           createAccount,
           createAccountWithGoogle,
           logOut,
+          logIn,
+          logInEmail,
+          setLogInEmail,
+          logInPassword,
+          setLogInPassword,
         }}
       >
         {children}

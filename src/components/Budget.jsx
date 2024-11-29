@@ -10,7 +10,7 @@ function Budget() {
     budgets,
     handleDeleteEntry,
     monthNames,
-    finalMonth,
+    categories,
   } = useBudget();
 
   // Format the current selected month (if it's a valid month string)
@@ -26,34 +26,16 @@ function Budget() {
       <div>
         <h1>This is your budget for {month}</h1>
       </div>
-      <div>
-        {budgets.length === 0 ? (
-          <p>
-            No budgets found.
-            <NavLink to="/create-budget">Start your budget</NavLink>
-          </p>
-        ) : (
-          budgets.map((budget) => {
-            // Get the month part from the budget
-            const monthNumber = parseInt(budget.month.split("-")[1], 10);
-            // Map to the full month name using the monthNames array
-            const formattedMonth = monthNames[monthNumber - 1];
-
-            return (
-              <div key={budget.id}>
-                <ul>
-                  <li>
-                    {budget.category} : {budget.amount}
-                    <button onClick={() => handleDeleteEntry(budget.id)}>
-                      Delete entry
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            );
-          })
-        )}
-      </div>
+      <ul>
+        {categories.map((categoryItem) => (
+          <li key={categoryItem.id}>
+            {categoryItem.Category}: ${categoryItem.Amount}{" "}
+            <button onClick={() => handleDeleteEntry(budget.id)}>
+              Delete entry
+            </button>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
