@@ -16,12 +16,10 @@ import { onAuthStateChanged } from "firebase/auth";
 const BudgetContext = createContext();
 
 function BudgetProvider({ children }) {
-  const { user, setUser, selectedMonth, isAuthenticated } = useAuth();
+  const { user, setUser, selectedMonth } = useAuth();
   const [month, setMonth] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
-  const [budgets, setBudgets] = useState([]);
-  const [currency, setCurrency] = useState("NGN");
   const [isMonth, setIsMonth] = useState(false);
   const [categories, setCategories] = useState([]);
   const [setBudget, setSetBudget] = useState(false);
@@ -126,7 +124,6 @@ function BudgetProvider({ children }) {
         setMonth,
         category,
         setCategory,
-        budgets,
         // handleStoreBudget,
         // handleDeleteEntry,
         monthNames,
