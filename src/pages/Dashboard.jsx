@@ -5,6 +5,7 @@ import Budget from "../components/Budget";
 import Expense from "../components/Expense";
 import { useExpense } from "../Contexts/ExpenseContext";
 import { useBudget } from "../Contexts/BudgetContext";
+import BudgetChart from "../components/BudgetGraph";
 
 function Dashboard() {
   const { logOut, selectedMonth } = useAuth();
@@ -18,6 +19,7 @@ function Dashboard() {
 
       {selectedMonth ? (
         <>
+          <BudgetChart />
           <Budget /> <NavLink to="/create-budget">Add more</NavLink>
         </>
       ) : (
