@@ -62,7 +62,10 @@ function AuthProvider({ children }) {
     try {
       const userCredential = await signInWithPopup(auth, googleProvider);
       const newUser = userCredential.user;
-
+      const inputedMonth = prompt("Which month do you want to see?");
+      {
+        inputedMonth ? setSelectedMonth(inputedMonth) : "";
+      }
       //try to store it in Firestore
       setDoc(doc(db, "users", newUser.uid), {
         email: newUser.email,
@@ -88,6 +91,7 @@ function AuthProvider({ children }) {
       await signOut(auth);
       setUser(null);
       setIsAuthenticated(false);
+      setSelectedMonth("");
       alert("You have successfully logged out.");
 
       navigate("/sign-up");

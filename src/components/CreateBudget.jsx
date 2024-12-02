@@ -17,7 +17,12 @@ function CreateBudget() {
     handleSetMonth,
   } = useBudget();
 
-  const { selectedMonth } = useAuth();
+  const { selectedMonth, setSelectedMonth } = useAuth();
+
+  const handleCreateNewMonth = () => {
+    setIsMonth(false);
+    setSelectedMonth("");
+  };
 
   // Automatically set `isMonth` to true if `selectedMonth` exists
   useEffect(() => {
@@ -67,6 +72,9 @@ function CreateBudget() {
 
           <button onClick={handleSetBudget} disabled={!isFormValid}>
             Submit budget
+          </button>
+          <button onClick={handleCreateNewMonth}>
+            Create budget for a new month
           </button>
         </div>
       )}
