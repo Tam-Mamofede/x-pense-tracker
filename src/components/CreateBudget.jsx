@@ -19,10 +19,6 @@ function CreateBudget() {
 
   const { selectedMonth } = useAuth();
 
-  if (selectedMonth) {
-    const noDisplayMonthInput = setIsMonth(true);
-  }
-
   // Check if amount is a valid positive number
   const isValidAmount = !isNaN(amount) && parseFloat(amount) > 0;
 
@@ -35,7 +31,9 @@ function CreateBudget() {
         <h1>Start spending wisely</h1>
         <p>Create your budget for the month below</p>
       </div>
-      {noDisplayMonthInput && (
+      {selectedMonth ? (
+        setIsMonth(true)
+      ) : (
         <>
           <label htmlFor="month">Month</label>
           <input
@@ -63,7 +61,7 @@ function CreateBudget() {
           />
 
           <button onClick={handleSetBudget} disabled={!isFormValid}>
-            Submit budget for {month}
+            Submit budget
           </button>
         </div>
       )}

@@ -24,6 +24,7 @@ function BudgetProvider({ children }) {
   const [currency, setCurrency] = useState("NGN");
   const [isMonth, setIsMonth] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [setBudget, setSetBudget] = useState(false);
   // const [spent, setSpent] = useState();
 
   const monthNames = [
@@ -84,7 +85,7 @@ function BudgetProvider({ children }) {
     }
     try {
       const userDocRef = doc(db, "users", user.uid);
-      const monthCollectionRef = collection(userDocRef, month);
+      const monthCollectionRef = collection(userDocRef, month || selectedMonth);
       const budgetDocRef = doc(monthCollectionRef, "Budgets");
       const categoryCollectionRef = collection(budgetDocRef, "Category");
       const categoryDocRef = doc(categoryCollectionRef, category);
@@ -98,6 +99,7 @@ function BudgetProvider({ children }) {
         Category: category,
         Amount: Number(amount),
       }); // Refresh the list after setting the budget
+      setSetBudget(true);
       console.log("Budgets document created successfully!");
     } catch (error) {
       console.error("Error creating budgets document:", error);
@@ -113,7 +115,7 @@ function BudgetProvider({ children }) {
       }
     });
     return () => unsubscribe();
-  }, [selectedMonth, user]);
+  }, [selectedMonth, user, setBudget]);
 
   return (
     <BudgetContext.Provider
