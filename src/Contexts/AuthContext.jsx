@@ -103,8 +103,10 @@ function AuthProvider({ children }) {
       await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
       setIsAuthenticated(true);
       setUser(auth.currentUser);
-
-      setSelectedMonth(prompt("Which month do you want to see?"));
+      const inputedMonth = prompt("Which month do you want to see?");
+      {
+        inputedMonth ? setSelectedMonth(inputedMonth) : "";
+      }
       navigate("/dashboard");
     } catch (err) {
       console.error("Login Error:", err.message);
@@ -135,6 +137,7 @@ function AuthProvider({ children }) {
           logInPassword,
           setLogInPassword,
           selectedMonth,
+          setSelectedMonth,
         }}
       >
         {children}

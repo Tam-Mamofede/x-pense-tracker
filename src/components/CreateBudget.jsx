@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useBudget } from "../Contexts/BudgetContext";
 import Budget from "./Budget";
 import { useAuth } from "../Contexts/AuthContext";
@@ -19,6 +19,13 @@ function CreateBudget() {
 
   const { selectedMonth } = useAuth();
 
+  // Automatically set `isMonth` to true if `selectedMonth` exists
+  useEffect(() => {
+    if (selectedMonth) {
+      setIsMonth(true);
+    }
+  }, [selectedMonth, setIsMonth]);
+
   // Check if amount is a valid positive number
   const isValidAmount = !isNaN(amount) && parseFloat(amount) > 0;
 
@@ -31,9 +38,7 @@ function CreateBudget() {
         <h1>Start spending wisely</h1>
         <p>Create your budget for the month below</p>
       </div>
-      {selectedMonth ? (
-        setIsMonth(true)
-      ) : (
+      {!selectedMonth && (
         <>
           <label htmlFor="month">Month</label>
           <input
@@ -44,7 +49,7 @@ function CreateBudget() {
           <button onClick={handleSetMonth}>Submit</button>
         </>
       )}
-      {isMonth === true && (
+      {isMonth && (
         <div>
           <label htmlFor="category">Category</label>
           <input

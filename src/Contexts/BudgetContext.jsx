@@ -16,7 +16,7 @@ import { onAuthStateChanged } from "firebase/auth";
 const BudgetContext = createContext();
 
 function BudgetProvider({ children }) {
-  const { user, setUser, selectedMonth } = useAuth();
+  const { user, setUser, selectedMonth, setSelectedMonth } = useAuth();
   const [month, setMonth] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
@@ -46,6 +46,7 @@ function BudgetProvider({ children }) {
       return;
     }
     setIsMonth(true);
+    setSelectedMonth(month);
   };
 
   const fetchCategories = async (uid) => {
