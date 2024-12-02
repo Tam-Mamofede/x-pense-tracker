@@ -7,21 +7,24 @@ import {
   deleteDoc,
   getDocs,
   updateDoc,
+  addDoc,
 } from "firebase/firestore";
-import { db } from "../../Config/firebase.config";
+import { auth, db } from "../../Config/firebase.config";
 import { useAuth } from "./AuthContext";
+import { onAuthStateChanged } from "firebase/auth";
 
 const BudgetContext = createContext();
 
 function BudgetProvider({ children }) {
-  const { user } = useAuth();
+  const { user, setUser, selectedMonth } = useAuth();
   const [month, setMonth] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [budgets, setBudgets] = useState([]);
   const [currency, setCurrency] = useState("NGN");
-  // const [savedMonth, setSavedMonth] = useState();
-  const [finalMonth, setFinalMonth] = useState("");
+  const [isMonth, setIsMonth] = useState(false);
+  const [categories, setCategories] = useState([]);
+  // const [spent, setSpent] = useState();
 
   const monthNames = [
     "January",
@@ -37,173 +40,81 @@ function BudgetProvider({ children }) {
     "November",
     "December",
   ];
-  // Function to store a budget in Firestore
-  const handleStoreBudget = async () => {
+
+  const handleSetMonth = () => {
+    if (!month) {
+      console.error("Month is not set!");
+      return;
+    }
+    setIsMonth(true);
+  };
+
+  const fetchCategories = async (uid) => {
+    if (!selectedMonth) {
+      console.error("No month selected.");
+      return;
+    }
+
+    if (!user || !user.uid) {
+      console.error("User is not logged in.");
+      return;
+    }
+
     try {
-      if (!user) {
-        alert("You must be logged in to create a budget.");
-        return;
-      }
+      const userDocRef = doc(db, "users", uid);
+      const monthCollectionRef = collection(userDocRef, selectedMonth);
+      const budgetDocRef = doc(monthCollectionRef, "Budgets");
+      const categoryCollectionRef = collection(budgetDocRef, "Category");
 
-      // Validate inputs
-      if (!month || !category || isNaN(amount) || parseFloat(amount) <= 0) {
-        alert(
-          "Please provide valid inputs for month, category, and a positive amount."
-        );
-        return;
-      }
+      const categorySnapshot = await getDocs(categoryCollectionRef);
+      const categoryList = categorySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-      const budgetDocRef = doc(
-        db,
-        `users/${user.uid}/budgets`,
-        `${month}-${category}`
-      );
-      const budgetData = {
-        month,
-        category,
-        amount: parseFloat(amount),
-        currency,
-        createdAt: new Date().toISOString(),
-      };
-
-      const docSnapshot = await getDoc(budgetDocRef);
-      if (docSnapshot.exists()) {
-        alert("A budget for this month and category already exists.");
-        return;
-      }
-
-      setBudgets((prev) => [
-        ...prev,
-        { id: `${month}-${category}`, ...budgetData },
-      ]);
-
-      await setDoc(budgetDocRef, budgetData);
-
-      alert("Budget created successfully!");
+      setCategories(categoryList);
     } catch (error) {
-      console.error("Error saving budget:", error);
-
-      setBudgets((prev) =>
-        prev.filter((budget) => budget.id !== `${month}-${category}`)
-      );
-
-      alert("Failed to create the budget. Please try again.");
+      console.error("Error fetching categories:", error);
     }
   };
 
+  const handleSetBudget = async () => {
+    if (!user || !user.uid) {
+      console.error("No user is logged in. Ensure the user is authenticated.");
+      return;
+    }
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const monthCollectionRef = collection(userDocRef, month);
+      const budgetDocRef = doc(monthCollectionRef, "Budgets");
+      const categoryCollectionRef = collection(budgetDocRef, "Category");
+      const categoryDocRef = doc(categoryCollectionRef, category);
+
+      if (!amount || isNaN(amount)) {
+        throw new Error("Amount is not valid. Please provide a number.");
+      }
+
+      await setDoc(categoryDocRef, {
+        createdAt: new Date(),
+        Category: category,
+        Amount: Number(amount),
+      }); // Refresh the list after setting the budget
+      console.log("Budgets document created successfully!");
+    } catch (error) {
+      console.error("Error creating budgets document:", error);
+    }
+  };
+
+  // Listen for authentication state changes
   useEffect(() => {
-    if (user) {
-      const fetchBudgets = async () => {
-        try {
-          const querySnapshot = await getDocs(
-            collection(db, `users/${user.uid}/budgets`)
-          );
-          const fetchedBudgets = [];
-          querySnapshot.forEach((doc) => {
-            fetchedBudgets.push({ id: doc.id, ...doc.data() });
-          });
-          setBudgets(fetchedBudgets);
-        } catch (error) {
-          console.error("Error fetching budgets:", error);
-        }
-      };
-      fetchBudgets();
-    }
-  }, [user]);
-
-  // useEffect(() => {
-  //   const getFinalMonth = async () => {
-  //     try {
-  //       const id = `${month}-${category}`;
-  //       const docRef = doc(db, `users/${user.uid}/budgets`, id);
-  //       const docSnap = await getDoc(docRef);
-
-  //       if (docSnap.exists()) {
-  //         const savedMonth = docSnap.data().month; // Adjust based on your Firestore document structure
-  //         const monthNumber = parseInt(savedMonth.split("-")[1], 10); // Assuming "month" is in "YYYY-MM" format
-  //         const monthNames = [
-  //           "January",
-  //           "February",
-  //           "March",
-  //           "April",
-  //           "May",
-  //           "June",
-  //           "July",
-  //           "August",
-  //           "September",
-  //           "October",
-  //           "November",
-  //           "December",
-  //         ];
-
-  //         setFinalMonth(monthNames[monthNumber - 1]);
-  //       }
-  //     } catch (err) {
-  //       console.error("Error fetching month data:", err);
-  //     }
-  //   };
-
-  //   getFinalMonth();
-  // }, [db, user, month, category]);
-
-  // useEffect(() => {
-  //   const getFinalMonth = async () => {
-  //     try {
-  //       const id = `${month}-${category}`;
-  //       const docRef = doc(db, `users/${user.uid}/budgets`, id);
-  //       const docSnap = await getDoc(docRef);
-
-  //       if (docSnap.exists()) {
-  //         setSavedMonth(id.month);
-
-  //         monthNames[parseInt(savedMonth.split("-")[1], 10) - 1];
-  //         setFinalMonth(monthNames[monthNumber - 1]);
-  //       }
-
-  //       getFinalMonth();
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-  // });
-
-  const handleDeleteEntry = async (budgetId) => {
-    try {
-      if (!user) {
-        alert("You must be logged in to delete a budget.");
-        return;
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      if (user) {
+        fetchCategories(user.uid);
       }
-
-      const budgetDocRef = doc(db, `users/${user.uid}/budgets`, budgetId);
-      await deleteDoc(budgetDocRef);
-
-      setBudgets((prev) => prev.filter((budget) => budget.id !== budgetId));
-      alert("Budget deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting budget:", error);
-      alert("Failed to delete the budget. Please try again.");
-    }
-  };
-
-  // Currency options
-  // const currencies = [
-  //   { code: "USD", symbol: "$" },
-  //   { code: "EUR", symbol: "€" },
-  //   { code: "GBP", symbol: "£" },
-  //   { code: "INR", symbol: "₹" },
-  //   { code: "JPY", symbol: "¥" },
-  //   { code: "NGN", symbol: "₦" },
-  // ];
-
-  // const formatAmount = (amount, currencyCode) => {
-  //   if (!amount || isNaN(amount)) return;
-
-  //   return new Intl.NumberFormat("en-US", {
-  //     style: "currency",
-  //     currency: currencyCode, // Use the currency code for formatting
-  //     currencyDisplay: "symbol", // Ensures it shows the symbol
-  //   }).format(amount);
-  // };
+    });
+    return () => unsubscribe(); // Cleanup the subscription
+  }, []);
 
   return (
     <BudgetContext.Provider
@@ -215,10 +126,14 @@ function BudgetProvider({ children }) {
         category,
         setCategory,
         budgets,
-        handleStoreBudget,
-        handleDeleteEntry,
+        // handleStoreBudget,
+        // handleDeleteEntry,
         monthNames,
-        finalMonth,
+        handleSetMonth,
+        handleSetBudget,
+        isMonth,
+        setIsMonth,
+        categories,
       }}
     >
       {children}
