@@ -32,16 +32,19 @@ function Budget() {
   // useEffect(() => {
   //   fetchMonth(user.uid);
   // }, [user]);
+  console.log("Fetched Categories:", categories);
 
   return (
     <>
       <div>
         <h1>This is your budget for {selectedMonth}</h1>
       </div>
+      {!categories && <p>Loading categories...</p>}
+      {categories.length === 0 && <p>No categories found.</p>}
       <ul>
         {categories.map((categoryItem) => (
           <li key={categoryItem.id}>
-            {categoryItem.category}: ${categoryItem.amount}{" "}
+            {categoryItem.Category}: {categoryItem.Amount}
             <button onClick={() => handleDeleteEntry(categoryItem.id)}>
               Delete entry
             </button>

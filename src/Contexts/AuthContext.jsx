@@ -112,50 +112,6 @@ function AuthProvider({ children }) {
     }
   };
 
-  //Monitor auth state
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-  //     if (firebaseUser) {
-  //       try {
-  //         // Fetch user data from Firestore
-  //         const userDocRef = doc(db, "users", firebaseUser.uid);
-  //         const userDoc = await getDoc(userDocRef);
-
-  //         if (userDoc.exists()) {
-  //           // Combine Firebase Auth data with Firestore data
-  //           // setUser({ uid: firebaseUser.uid, ...userDoc.data() });
-  //           setIsAuthenticated(true);
-  //         } else {
-  //           console.error("User document not found in Firestore.");
-  //           setUser(firebaseUser); // At least set the basic Firebase Auth user data
-  //           setIsAuthenticated(true);
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching user document:", error.message);
-  //       }
-  //     } else {
-  //       // No user is logged in
-  //       setUser(null);
-  //       setIsAuthenticated(false);
-  //     }
-  //   });
-
-  // //Cleanup the subscription on component unmount
-  //   return () => unsubscribe();
-  // }, []);
-
-  // const testFetch = async () => {
-  //   const docRef = doc(db, `users/${user.uid}/budgets`); // Replace user-id
-  //   const docSnap = await getDoc(docRef);
-
-  //   if (docSnap.exists()) {
-  //     console.log("Document Data:", docSnap.data());
-  //   } else {
-  //     console.log("No such document!");
-  //   }
-  // };
-  // testFetch();
-
   return (
     <div>
       <AuthContext.Provider

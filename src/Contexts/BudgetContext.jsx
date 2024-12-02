@@ -16,7 +16,7 @@ import { onAuthStateChanged } from "firebase/auth";
 const BudgetContext = createContext();
 
 function BudgetProvider({ children }) {
-  const { user, setUser, selectedMonth } = useAuth();
+  const { user, setUser, selectedMonth, isAuthenticated } = useAuth();
   const [month, setMonth] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
@@ -65,7 +65,6 @@ function BudgetProvider({ children }) {
       const monthCollectionRef = collection(userDocRef, selectedMonth);
       const budgetDocRef = doc(monthCollectionRef, "Budgets");
       const categoryCollectionRef = collection(budgetDocRef, "Category");
-
       const categorySnapshot = await getDocs(categoryCollectionRef);
       const categoryList = categorySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -109,12 +108,12 @@ function BudgetProvider({ children }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      if (user) {
+      if (user && user.uid && selectedMonth) {
         fetchCategories(user.uid);
       }
     });
-    return () => unsubscribe(); // Cleanup the subscription
-  }, []);
+    return () => unsubscribe();
+  }, [selectedMonth, user]);
 
   return (
     <BudgetContext.Provider
