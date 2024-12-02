@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useBudget } from "../Contexts/BudgetContext";
 import Budget from "./Budget";
+import { useAuth } from "../Contexts/AuthContext";
 
 function CreateBudget() {
   const {
@@ -10,22 +11,31 @@ function CreateBudget() {
     setAmount,
     category,
     setCategory,
-    handleStoreBudget,
-    budgets,
-    handleDeleteEntry,
-    monthNames,
+    handleSetBudget,
+    isMonth,
+    setIsMonth,
+    handleSetMonth,
   } = useBudget();
 
-  // Format the current selected month (if it's a valid month string)
-  const formattedMonth = month
-    ? monthNames[parseInt(month.split("-")[1], 10) - 1]
-    : month;
+  const { selectedMonth, setSelectedMonth } = useAuth();
+
+  const handleCreateNewMonth = () => {
+    setIsMonth(false);
+    setSelectedMonth("");
+  };
+
+  // Automatically set `isMonth` to true if `selectedMonth` exists
+  useEffect(() => {
+    if (selectedMonth) {
+      setIsMonth(true);
+    }
+  }, [selectedMonth, setIsMonth]);
 
   // Check if amount is a valid positive number
   const isValidAmount = !isNaN(amount) && parseFloat(amount) > 0;
 
   // Form validation check
-  const isFormValid = month && category && isValidAmount;
+  const isFormValid = category && isValidAmount;
 
   return (
     <>
@@ -33,33 +43,41 @@ function CreateBudget() {
         <h1>Start spending wisely</h1>
         <p>Create your budget for the month below</p>
       </div>
+      {!selectedMonth && (
+        <>
+          <label htmlFor="month">Month</label>
+          <input
+            type="text"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+          />
+          <button onClick={handleSetMonth}>Submit</button>
+        </>
+      )}
+      {isMonth && (
+        <div>
+          <label htmlFor="category">Category</label>
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
 
-      <div>
-        <label htmlFor="month">Month (YYYY-MM)</label>
-        <input
-          type="text"
-          value={month}
-          onChange={(e) => setMonth(e.target.value)}
-        />
+          <label htmlFor="amount">Amount</label>
+          <input
+            type="text"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
 
-        <label htmlFor="category">Category</label>
-        <input
-          type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
-
-        <label htmlFor="amount">Amount</label>
-        <input
-          type="text"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-
-        <button onClick={handleStoreBudget} disabled={!isFormValid}>
-          Submit budget for {month}
-        </button>
-      </div>
+          <button onClick={handleSetBudget} disabled={!isFormValid}>
+            Submit budget
+          </button>
+          <button onClick={handleCreateNewMonth}>
+            Create budget for a new month
+          </button>
+        </div>
+      )}
       <div>
         <Budget />
       </div>
