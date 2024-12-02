@@ -62,7 +62,10 @@ function AuthProvider({ children }) {
     try {
       const userCredential = await signInWithPopup(auth, googleProvider);
       const newUser = userCredential.user;
-
+      const inputedMonth = prompt("Which month do you want to see?");
+      {
+        inputedMonth ? setSelectedMonth(inputedMonth) : "";
+      }
       //try to store it in Firestore
       setDoc(doc(db, "users", newUser.uid), {
         email: newUser.email,
@@ -88,6 +91,7 @@ function AuthProvider({ children }) {
       await signOut(auth);
       setUser(null);
       setIsAuthenticated(false);
+      setSelectedMonth("");
       alert("You have successfully logged out.");
 
       navigate("/sign-up");
@@ -103,58 +107,16 @@ function AuthProvider({ children }) {
       await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
       setIsAuthenticated(true);
       setUser(auth.currentUser);
-
-      setSelectedMonth(prompt("Which month do you want to see?"));
+      const inputedMonth = prompt("Which month do you want to see?");
+      {
+        inputedMonth ? setSelectedMonth(inputedMonth) : "";
+      }
       navigate("/dashboard");
     } catch (err) {
       console.error("Login Error:", err.message);
       alert("Login failed: " + err.message);
     }
   };
-
-  //Monitor auth state
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-  //     if (firebaseUser) {
-  //       try {
-  //         // Fetch user data from Firestore
-  //         const userDocRef = doc(db, "users", firebaseUser.uid);
-  //         const userDoc = await getDoc(userDocRef);
-
-  //         if (userDoc.exists()) {
-  //           // Combine Firebase Auth data with Firestore data
-  //           // setUser({ uid: firebaseUser.uid, ...userDoc.data() });
-  //           setIsAuthenticated(true);
-  //         } else {
-  //           console.error("User document not found in Firestore.");
-  //           setUser(firebaseUser); // At least set the basic Firebase Auth user data
-  //           setIsAuthenticated(true);
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching user document:", error.message);
-  //       }
-  //     } else {
-  //       // No user is logged in
-  //       setUser(null);
-  //       setIsAuthenticated(false);
-  //     }
-  //   });
-
-  // //Cleanup the subscription on component unmount
-  //   return () => unsubscribe();
-  // }, []);
-
-  // const testFetch = async () => {
-  //   const docRef = doc(db, `users/${user.uid}/budgets`); // Replace user-id
-  //   const docSnap = await getDoc(docRef);
-
-  //   if (docSnap.exists()) {
-  //     console.log("Document Data:", docSnap.data());
-  //   } else {
-  //     console.log("No such document!");
-  //   }
-  // };
-  // testFetch();
 
   return (
     <div>
@@ -179,6 +141,7 @@ function AuthProvider({ children }) {
           logInPassword,
           setLogInPassword,
           selectedMonth,
+          setSelectedMonth,
         }}
       >
         {children}

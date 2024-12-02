@@ -16,14 +16,13 @@ import { onAuthStateChanged } from "firebase/auth";
 const BudgetContext = createContext();
 
 function BudgetProvider({ children }) {
-  const { user, setUser, selectedMonth } = useAuth();
+  const { user, setUser, selectedMonth, setSelectedMonth } = useAuth();
   const [month, setMonth] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
-  const [budgets, setBudgets] = useState([]);
-  const [currency, setCurrency] = useState("NGN");
   const [isMonth, setIsMonth] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [setBudget, setSetBudget] = useState(false);
   // const [spent, setSpent] = useState();
 
   const monthNames = [
@@ -47,6 +46,7 @@ function BudgetProvider({ children }) {
       return;
     }
     setIsMonth(true);
+    setSelectedMonth(month);
   };
 
   const fetchCategories = async (uid) => {
@@ -65,7 +65,6 @@ function BudgetProvider({ children }) {
       const monthCollectionRef = collection(userDocRef, selectedMonth);
       const budgetDocRef = doc(monthCollectionRef, "Budgets");
       const categoryCollectionRef = collection(budgetDocRef, "Category");
-
       const categorySnapshot = await getDocs(categoryCollectionRef);
       const categoryList = categorySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -85,7 +84,7 @@ function BudgetProvider({ children }) {
     }
     try {
       const userDocRef = doc(db, "users", user.uid);
-      const monthCollectionRef = collection(userDocRef, month);
+      const monthCollectionRef = collection(userDocRef, month || selectedMonth);
       const budgetDocRef = doc(monthCollectionRef, "Budgets");
       const categoryCollectionRef = collection(budgetDocRef, "Category");
       const categoryDocRef = doc(categoryCollectionRef, category);
@@ -99,6 +98,7 @@ function BudgetProvider({ children }) {
         Category: category,
         Amount: Number(amount),
       }); // Refresh the list after setting the budget
+      setSetBudget(true);
       console.log("Budgets document created successfully!");
     } catch (error) {
       console.error("Error creating budgets document:", error);
@@ -109,12 +109,12 @@ function BudgetProvider({ children }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      if (user) {
+      if (user && user.uid && selectedMonth) {
         fetchCategories(user.uid);
       }
     });
-    return () => unsubscribe(); // Cleanup the subscription
-  }, []);
+    return () => unsubscribe();
+  }, [selectedMonth, user, setBudget]);
 
   return (
     <BudgetContext.Provider
@@ -125,7 +125,6 @@ function BudgetProvider({ children }) {
         setMonth,
         category,
         setCategory,
-        budgets,
         // handleStoreBudget,
         // handleDeleteEntry,
         monthNames,

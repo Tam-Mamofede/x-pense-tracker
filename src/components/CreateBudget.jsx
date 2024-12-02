@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useBudget } from "../Contexts/BudgetContext";
 import Budget from "./Budget";
+import { useAuth } from "../Contexts/AuthContext";
 
 function CreateBudget() {
   const {
@@ -12,8 +13,23 @@ function CreateBudget() {
     setCategory,
     handleSetBudget,
     isMonth,
+    setIsMonth,
     handleSetMonth,
   } = useBudget();
+
+  const { selectedMonth, setSelectedMonth } = useAuth();
+
+  const handleCreateNewMonth = () => {
+    setIsMonth(false);
+    setSelectedMonth("");
+  };
+
+  // Automatically set `isMonth` to true if `selectedMonth` exists
+  useEffect(() => {
+    if (selectedMonth) {
+      setIsMonth(true);
+    }
+  }, [selectedMonth, setIsMonth]);
 
   // Check if amount is a valid positive number
   const isValidAmount = !isNaN(amount) && parseFloat(amount) > 0;
@@ -26,17 +42,19 @@ function CreateBudget() {
       <div>
         <h1>Start spending wisely</h1>
         <p>Create your budget for the month below</p>
-
-        <label htmlFor="month">Month</label>
-        <input
-          type="text"
-          value={month}
-          onChange={(e) => setMonth(e.target.value)}
-        />
-        <button onClick={handleSetMonth}>Submit</button>
       </div>
-
-      {isMonth === true && (
+      {!selectedMonth && (
+        <>
+          <label htmlFor="month">Month</label>
+          <input
+            type="text"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+          />
+          <button onClick={handleSetMonth}>Submit</button>
+        </>
+      )}
+      {isMonth && (
         <div>
           <label htmlFor="category">Category</label>
           <input
@@ -53,7 +71,10 @@ function CreateBudget() {
           />
 
           <button onClick={handleSetBudget} disabled={!isFormValid}>
-            Submit budget for {month}
+            Submit budget
+          </button>
+          <button onClick={handleCreateNewMonth}>
+            Create budget for a new month
           </button>
         </div>
       )}
