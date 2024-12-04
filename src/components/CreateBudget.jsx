@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useBudget } from "../Contexts/BudgetContext";
 import Budget from "./Budget";
 import { useAuth } from "../Contexts/AuthContext";
@@ -15,19 +15,23 @@ function CreateBudget() {
     isMonth,
     setIsMonth,
     handleSetMonth,
+    setCategories,
   } = useBudget();
 
   const { selectedMonth, setSelectedMonth } = useAuth();
+  const [displayCat, setDisplayCat] = useState(true);
 
   const handleCreateNewMonth = () => {
     setIsMonth(false);
     setSelectedMonth("");
+    setDisplayCat(false);
   };
 
   // Automatically set `isMonth` to true if `selectedMonth` exists
   useEffect(() => {
     if (selectedMonth) {
       setIsMonth(true);
+      setDisplayCat(true);
     }
   }, [selectedMonth, setIsMonth]);
 
@@ -78,9 +82,7 @@ function CreateBudget() {
           </button>
         </div>
       )}
-      <div>
-        <Budget />
-      </div>
+      <div>{displayCat === true && <Budget />}</div>
     </>
   );
 }

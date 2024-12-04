@@ -77,7 +77,8 @@ function BudgetProvider({ children }) {
     }
   };
 
-  const handleSetBudget = async () => {
+  const handleSetBudget = async (event) => {
+    event.preventDefault();
     if (!user || !user.uid) {
       console.error("No user is logged in. Ensure the user is authenticated.");
       return;
@@ -98,10 +99,31 @@ function BudgetProvider({ children }) {
         Category: category,
         Amount: Number(amount),
       }); // Refresh the list after setting the budget
+
       setSetBudget(true);
       console.log("Budgets document created successfully!");
+
+      setCategory("");
+      setAmount("");
     } catch (error) {
       console.error("Error creating budgets document:", error);
+    }
+  };
+
+  const handleDeleteEntry = async (docId) => {
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const monthCollectionRef = collection(userDocRef, selectedMonth);
+      const budgetDocRef = doc(monthCollectionRef, "Budgets");
+      const categoryCollectionRef = collection(budgetDocRef, "Category");
+      const catDocRef = doc(categoryCollectionRef, docId);
+      await deleteDoc(catDocRef);
+
+      setCategories((prevItems) => prevItems.filter((item) => item !== docId));
+
+      console.log(`${docId} has been deleted successfully`);
+    } catch (error) {
+      console.error("Error deleting field:", error);
     }
   };
 
@@ -114,7 +136,7 @@ function BudgetProvider({ children }) {
       }
     });
     return () => unsubscribe();
-  }, [selectedMonth, user, setBudget]);
+  }, [selectedMonth, user, categories]);
 
   return (
     <BudgetContext.Provider
@@ -125,14 +147,14 @@ function BudgetProvider({ children }) {
         setMonth,
         category,
         setCategory,
-        // handleStoreBudget,
-        // handleDeleteEntry,
         monthNames,
         handleSetMonth,
         handleSetBudget,
         isMonth,
         setIsMonth,
         categories,
+        setCategories,
+        handleDeleteEntry,
       }}
     >
       {children}
