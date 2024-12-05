@@ -126,6 +126,15 @@ function BudgetProvider({ children }) {
       console.error("Error deleting field:", error);
     }
   };
+  //change month anywhere in app
+  const handleChangeMonth = () => {
+    const inputedMonth = prompt("Which month do you want to see?");
+    {
+      inputedMonth
+        ? setSelectedMonth(inputedMonth)
+        : alert("Please input the month you would like to see.");
+    }
+  };
 
   // Listen for authentication state changes
   useEffect(() => {
@@ -155,6 +164,7 @@ function BudgetProvider({ children }) {
         categories,
         setCategories,
         handleDeleteEntry,
+        handleChangeMonth,
       }}
     >
       {children}

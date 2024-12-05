@@ -16,6 +16,7 @@ function CreateBudget() {
     setIsMonth,
     handleSetMonth,
     setCategories,
+    handleChangeMonth,
   } = useBudget();
 
   const { selectedMonth, setSelectedMonth } = useAuth();
@@ -82,7 +83,10 @@ function CreateBudget() {
           </button>
         </div>
       )}
-      <div>{displayCat === true && <Budget />}</div>
+      <div>
+        {displayCat === true && <Budget />}
+        <button onClick={handleChangeMonth}>change month</button>
+      </div>
     </>
   );
 }

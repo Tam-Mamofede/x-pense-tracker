@@ -55,6 +55,9 @@
 
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
+import { db } from "../../Config/firebase.config";
+import { doc, collection, getDocs } from "firebase/firestore";
+
 import { useBudget } from "../Contexts/BudgetContext";
 import {
   Chart as ChartJS,
@@ -66,6 +69,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useAuth } from "../Contexts/AuthContext";
 
 // Register Chart.js components
 ChartJS.register(
@@ -80,7 +84,21 @@ ChartJS.register(
 
 function LineChart() {
   const { categories } = useBudget();
-  const [chartData, setChartData] = useState(null);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const { user, selectedMonth } = useAuth();
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Budget Amounts",
+        data: [],
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderWidth: 2,
+        tension: 0.4,
+      },
+    ],
+  });
 
   useEffect(() => {
     if (categories && categories.length > 0) {
@@ -103,11 +121,28 @@ function LineChart() {
     }
   }, [categories]);
 
-  if (!chartData) return <p>Loading chart...</p>;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const monthCollectionRef = collection(userDocRef, selectedMonth);
+        const querySnapshot = await getDocs(monthCollectionRef);
+        console.log("Is collection empty:", querySnapshot.empty);
+        setIsEmpty(querySnapshot.empty);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+  }, [selectedMonth, user.uid]);
+  if (!chartData) return <p>No data to load on chart.</p>;
+  if (isEmpty) return <p>Please create your budget to see your chart</p>;
 
   return (
     <div>
       <h2>Budget Overview</h2>
+
       <Line
         data={chartData}
         options={{
