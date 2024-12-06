@@ -11,6 +11,7 @@ function Expense() {
     expenseAmount,
     setExpenseAmount,
     handleSumbitExpense,
+    handleShowExpense,
   } = useExpense();
 
   return (

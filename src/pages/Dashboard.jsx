@@ -10,7 +10,7 @@ import BudgetChart from "../components/BudgetGraph";
 function Dashboard() {
   const { logOut, selectedMonth } = useAuth();
   const { handleChangeMonth, categories } = useBudget();
-  const { handleShowExpense, showExpense, setShowExpense } = useExpense();
+  const { handleShowExpense, showExpense } = useExpense();
 
   return (
     <div>
