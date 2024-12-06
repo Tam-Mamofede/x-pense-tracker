@@ -10,25 +10,13 @@ function Expense() {
     setExpenseCategory,
     expenseAmount,
     setExpenseAmount,
+    handleSumbitExpense,
   } = useExpense();
 
-  const handleSumbitExpense = () => {
-    if (expenseCategory === category) {
-      const calcAmount = Number(amount) - Number(expenseAmount);
-      setAmount(calcAmount);
-    } else {
-      alert(
-        "You have not set a budget for this category, so we cannot deduct your expense"
-      );
-    }
-
-    setShowExpense(false);
-    return amount;
-  };
   return (
     <div>
       <label htmlFor="expenseCategory">
-        What category does this fall under?
+        What category does this expense fall under?
       </label>
       <input
         type="text"
@@ -39,7 +27,9 @@ function Expense() {
       <input type="number" value={expenseAmount} onChange={setExpenseAmount} />
       <button onClick={handleSumbitExpense}>Submit expense</button>
 
-      <p>This is how much you have left for this category</p>
+      <p>This is how much you have left for this {expenseCategory}: Amount</p>
+
+      <button onClick={handleShowExpense}>Add another expense</button>
     </div>
   );
 }

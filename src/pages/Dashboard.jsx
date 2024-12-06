@@ -16,7 +16,6 @@ function Dashboard() {
     <div>
       <p> This is the dashboard</p>
       <button onClick={logOut}>Log Out</button>
-
       {selectedMonth ? (
         <>
           <BudgetChart />
@@ -37,19 +36,12 @@ function Dashboard() {
           </p>
         </>
       )}
-      {/* {(
-        <>
-     
-          <button onClick={handleShowExpense} disabled={showExpense}>
-            Log an expense
-          </button>
-          {showExpense == true && <Expense />}
-        </>
-      ) || (
-        <div>
-        
-        </div>
-      )} */}
+      <>
+        <button onClick={handleShowExpense} disabled={showExpense}>
+          Log an expense
+        </button>
+        {showExpense == true && <Expense />}
+      </>
     </div>
   );
 }

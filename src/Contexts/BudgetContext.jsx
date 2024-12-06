@@ -22,9 +22,40 @@ function BudgetProvider({ children }) {
   const [category, setCategory] = useState("");
   const [isMonth, setIsMonth] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [setBudget, setSetBudget] = useState(false);
-  // const [spent, setSpent] = useState();
+  const [isBudget, setIsBudget] = useState(false);
+  const [catIDs, setCatIDs] = useState([]);
+  // const [budgetDocId, setBudgetDocId] = useState("");
 
+  ///////////////////////////////////////////
+  useEffect(() => {
+    const fetchDocIDs = async () => {
+      if (!selectedMonth) {
+        console.error("Selected month is not set. Aborting fetchDocIDs.");
+        return;
+      }
+
+      if (!user || !user.uid) {
+        console.error("User is not logged in.");
+        return;
+      }
+
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const monthCollectionRef = collection(userDocRef, selectedMonth);
+        const budgetDocRef = doc(monthCollectionRef, "Budgets");
+        const categoryCollectionRef = collection(budgetDocRef, "Category");
+        const querySnapshot = await getDocs(categoryCollectionRef);
+        const ids = querySnapshot.docs.map((doc) => doc.id);
+        setCatIDs(ids); // Update state with document IDs
+      } catch (error) {
+        console.error("Error fetching document IDs:", error);
+      }
+    };
+
+    fetchDocIDs();
+  }, [user, selectedMonth]);
+
+  //////////////////////////////////////
   const monthNames = [
     "January",
     "February",
@@ -40,6 +71,7 @@ function BudgetProvider({ children }) {
     "December",
   ];
 
+  //////////////////////////////////////////////////////
   const handleSetMonth = () => {
     if (!month) {
       console.error("Month is not set!");
@@ -49,6 +81,7 @@ function BudgetProvider({ children }) {
     setSelectedMonth(month);
   };
 
+  /////////////////////////////////////////////////////
   const fetchCategories = async (uid) => {
     if (!selectedMonth) {
       console.error("No month selected.");
@@ -77,6 +110,7 @@ function BudgetProvider({ children }) {
     }
   };
 
+  ///////////////////////////////////////////////////////
   const handleSetBudget = async (event) => {
     event.preventDefault();
     if (!user || !user.uid) {
@@ -100,7 +134,7 @@ function BudgetProvider({ children }) {
         Amount: Number(amount),
       }); // Refresh the list after setting the budget
 
-      setSetBudget(true);
+      setIsBudget(true);
       console.log("Budgets document created successfully!");
 
       setCategory("");
@@ -110,6 +144,7 @@ function BudgetProvider({ children }) {
     }
   };
 
+  /////////////////////////////////////////////////////////////////////////////
   const handleDeleteEntry = async (docId) => {
     try {
       const userDocRef = doc(db, "users", user.uid);
@@ -126,6 +161,8 @@ function BudgetProvider({ children }) {
       console.error("Error deleting field:", error);
     }
   };
+
+  ///////////////////////////////////////////////////////////////////
   //change month anywhere in app
   const handleChangeMonth = () => {
     const inputedMonth = prompt("Which month do you want to see?");
@@ -136,6 +173,7 @@ function BudgetProvider({ children }) {
     }
   };
 
+  //////////////////////////////////////////////////////////////////////////
   // Listen for authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -165,6 +203,7 @@ function BudgetProvider({ children }) {
         setCategories,
         handleDeleteEntry,
         handleChangeMonth,
+        catIDs,
       }}
     >
       {children}
