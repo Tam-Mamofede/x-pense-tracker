@@ -4,14 +4,22 @@ const ExpenseContext = createContext();
 
 function ExpenseProvider({ children }) {
   const [showExpense, setShowExpense] = useState(false);
-
+  const [expenseCategory, setExpenseCategory] = useState("");
+  const [expenseAmount, setExpenseAmount] = useState(0);
   const handleShowExpense = () => {
     setShowExpense(true);
   };
-
   return (
     <ExpenseContext.Provider
-      value={{ handleShowExpense, setShowExpense, showExpense }}
+      value={{
+        handleShowExpense,
+        setShowExpense,
+        showExpense,
+        expenseCategory,
+        setExpenseCategory,
+        expenseAmount,
+        setExpenseAmount,
+      }}
     >
       {children}
     </ExpenseContext.Provider>

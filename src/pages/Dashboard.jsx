@@ -5,10 +5,11 @@ import Budget from "../components/Budget";
 import Expense from "../components/Expense";
 import { useExpense } from "../Contexts/ExpenseContext";
 import { useBudget } from "../Contexts/BudgetContext";
+import BudgetChart from "../components/BudgetGraph";
 
 function Dashboard() {
   const { logOut, selectedMonth } = useAuth();
-  const { isMonth, month } = useBudget();
+  const { handleChangeMonth, categories } = useBudget();
   const { handleShowExpense, showExpense, setShowExpense } = useExpense();
 
   return (
@@ -18,13 +19,21 @@ function Dashboard() {
 
       {selectedMonth ? (
         <>
-          <Budget /> <NavLink to="/create-budget">Add more</NavLink>
+          <BudgetChart />
+          <Budget />
+          {categories.length <= 0 ? (
+            <NavLink to="/create-budget">Create a budget.</NavLink>
+          ) : (
+            <NavLink to="/create-budget">Add more</NavLink>
+          )}{" "}
+          <button onClick={handleChangeMonth}>change month</button>
         </>
       ) : (
         <>
           <p>
             Start you budgeting journery.
-            <NavLink to="/create-budget"> Click here!</NavLink>
+            <NavLink to="/create-budget"> Click here!</NavLink>{" "}
+            <button onClick={handleChangeMonth}>change month</button>
           </p>
         </>
       )}
