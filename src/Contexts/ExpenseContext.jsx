@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useBudget } from "./BudgetContext";
-import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 import { db } from "../../Config/firebase.config";
 import { useAuth } from "./AuthContext";
 
@@ -14,6 +14,7 @@ function ExpenseProvider({ children }) {
   const [expenseCategory, setExpenseCategory] = useState("");
   const [expenseAmount, setExpenseAmount] = useState("");
   const [amountValue, setAmountValue] = useState();
+  const [isSubmitExpense, setIsSubmitExpense] = useState(false);
 
   const handleShowExpense = () => {
     setShowExpense(true);
@@ -38,20 +39,28 @@ function ExpenseProvider({ children }) {
         const budgetDocRef = doc(monthCollectionRef, "Budgets");
         const categoryCollectionRef = collection(budgetDocRef, "Category");
         const docRef = doc(categoryCollectionRef, expenseCategory);
-
-        // Fetch the document
         const docSnap = await getDoc(docRef);
+
         if (docSnap.exists()) {
           const value = docSnap.data().Amount;
           const calcAmount = Number(value) - Number(expenseAmount);
 
-          // Update Firestore with the new amount
-          await updateDoc(docRef, {
-            Amount: calcAmount,
-          });
-          setAmountValue(calcAmount);
-          setExpenseAmount();
-          setExpenseCategory("");
+          if (docSnap.data().Expense) {
+            const expenseData = docSnap.data();
+            const previousAmount = Number(expenseData.Expense);
+            const totalSpent = previousAmount + Number(expenseAmount);
+
+            await updateDoc(
+              docRef,
+              { Amount: calcAmount, Expense: totalSpent },
+              { merge: true }
+            );
+          } else {
+            await updateDoc(docRef, {
+              Amount: calcAmount,
+              Expense: expenseAmount,
+            });
+          }
         } else {
           alert("Budget category document does not exist.");
         }
@@ -67,6 +76,8 @@ function ExpenseProvider({ children }) {
       );
     } finally {
       setShowExpense(false);
+      setExpenseAmount();
+      setExpenseCategory("");
     }
   };
 
