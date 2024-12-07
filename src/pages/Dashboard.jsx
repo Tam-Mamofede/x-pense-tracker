@@ -30,7 +30,7 @@ function Dashboard() {
       ) : (
         <>
           <p>
-            Start you budgeting journery.
+            Start you budgeting journey.
             <NavLink to="/create-budget"> Click here!</NavLink>{" "}
             <button onClick={handleChangeMonth}>change month</button>
           </p>

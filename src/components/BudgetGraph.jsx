@@ -30,19 +30,7 @@ function LineChart() {
   const { categories } = useBudget();
   const { user, selectedMonth } = useAuth();
   const [isEmpty, setIsEmpty] = useState(false);
-  const [chartData, setChartData] = useState({
-    labels: [],
-    datasets: [
-      {
-        label: "Budget Amounts",
-        data: [],
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderWidth: 2,
-        tension: 0.4,
-      },
-    ],
-  });
+  const [chartData, setChartData] = useState({});
 
   useEffect(() => {
     if (categories?.length > 0) {
@@ -75,8 +63,11 @@ function LineChart() {
       try {
         const userDocRef = doc(db, "users", user.uid);
         const monthCollectionRef = collection(userDocRef, selectedMonth);
-        const querySnapshot = await getDocs(monthCollectionRef);
+        const budgetDocRef = doc(monthCollectionRef, "Budgets");
+        const categoryCollectionRef = collection(budgetDocRef, "Category");
+        const querySnapshot = await getDocs(categoryCollectionRef);
         setIsEmpty(querySnapshot.empty);
+        console.log(querySnapshot.empty);
       } catch (err) {
         console.error("Error fetching data:", err);
       }

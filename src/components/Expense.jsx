@@ -10,7 +10,7 @@ function Expense() {
     setExpenseCategory,
     expenseAmount,
     setExpenseAmount,
-    handleSumbitExpense,
+    handleSubmitExpense,
     handleShowExpense,
   } = useExpense();
 
@@ -22,13 +22,20 @@ function Expense() {
       <input
         type="text"
         value={expenseCategory}
-        onChange={setExpenseCategory}
+        onChange={(e) => setExpenseCategory(e.target.value)}
       />
       <label htmlFor="expenseAmount">How much did you spend?</label>
-      <input type="number" value={expenseAmount} onChange={setExpenseAmount} />
-      <button onClick={handleSumbitExpense}>Submit expense</button>
+      <input
+        type="text"
+        value={expenseAmount}
+        onChange={(e) => setExpenseAmount(Number(e.target.value))}
+        placeholder="5000"
+      />
+      <button onClick={handleSubmitExpense}>Submit expense</button>
 
-      <p>This is how much you have left for this {expenseCategory}: Amount</p>
+      {expenseCategory && (
+        <p>This is how much you have left for this {expenseCategory}: Amount</p>
+      )}
 
       <button onClick={handleShowExpense}>Add another expense</button>
     </div>

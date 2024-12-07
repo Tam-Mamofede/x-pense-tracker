@@ -26,35 +26,6 @@ function BudgetProvider({ children }) {
   const [catIDs, setCatIDs] = useState([]);
   // const [budgetDocId, setBudgetDocId] = useState("");
 
-  ///////////////////////////////////////////
-  useEffect(() => {
-    const fetchDocIDs = async () => {
-      if (!selectedMonth) {
-        console.error("Selected month is not set. Aborting fetchDocIDs.");
-        return;
-      }
-
-      if (!user || !user.uid) {
-        console.error("User is not logged in.");
-        return;
-      }
-
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        const monthCollectionRef = collection(userDocRef, selectedMonth);
-        const budgetDocRef = doc(monthCollectionRef, "Budgets");
-        const categoryCollectionRef = collection(budgetDocRef, "Category");
-        const querySnapshot = await getDocs(categoryCollectionRef);
-        const ids = querySnapshot.docs.map((doc) => doc.id);
-        setCatIDs(ids); // Update state with document IDs
-      } catch (error) {
-        console.error("Error fetching document IDs:", error);
-      }
-    };
-
-    fetchDocIDs();
-  }, [user, selectedMonth]);
-
   //////////////////////////////////////
   const monthNames = [
     "January",
@@ -144,6 +115,22 @@ function BudgetProvider({ children }) {
     }
   };
 
+  //////////////////////////////////////////////////
+  const debounce = (func, delay) => {
+    let timer; // Timer to track the delay
+    return (...args) => {
+      clearTimeout(timer); // Clear the existing timer if the function is called again
+      timer = setTimeout(() => func(...args), delay); // Set a new timer to execute the function after the delay
+    };
+  };
+  const debouncedFetchCategories = debounce(fetchCategories, 500);
+
+  useEffect(() => {
+    if (user && user.uid && selectedMonth) {
+      debouncedFetchCategories(user.uid); // Use the debounced version
+    }
+  }, [selectedMonth, user]);
+
   /////////////////////////////////////////////////////////////////////////////
   const handleDeleteEntry = async (docId) => {
     try {
@@ -185,6 +172,31 @@ function BudgetProvider({ children }) {
     return () => unsubscribe();
   }, [selectedMonth, user, categories]);
 
+  ///////////////////////////////////////////
+  useEffect(() => {
+    const fetchDocIDs = async () => {
+      if (!user || !user.uid) {
+        console.error("User is not logged in.");
+        return;
+      }
+
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const monthCollectionRef = collection(userDocRef, selectedMonth);
+        const budgetDocRef = doc(monthCollectionRef, "Budgets");
+        const categoryCollectionRef = collection(budgetDocRef, "Category");
+        const querySnapshot = await getDocs(categoryCollectionRef);
+        const ids = querySnapshot.docs.map((doc) => doc.id);
+        setCatIDs(ids);
+      } catch (error) {
+        console.error("Error fetching document IDs:", error);
+      }
+    };
+
+    if (user && user.uid && selectedMonth) {
+      fetchDocIDs();
+    }
+  }, [user, selectedMonth]);
   return (
     <BudgetContext.Provider
       value={{
