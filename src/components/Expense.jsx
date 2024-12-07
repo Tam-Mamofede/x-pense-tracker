@@ -3,15 +3,14 @@ import { useBudget } from "../Contexts/BudgetContext";
 import { useExpense } from "../Contexts/ExpenseContext";
 
 function Expense() {
-  const { category, setCategory, month, amount, setAmount } = useBudget();
   const {
-    setShowExpense,
     expenseCategory,
     setExpenseCategory,
     expenseAmount,
     setExpenseAmount,
     handleSubmitExpense,
     handleShowExpense,
+    amountValue,
   } = useExpense();
 
   return (
@@ -34,7 +33,9 @@ function Expense() {
       <button onClick={handleSubmitExpense}>Submit expense</button>
 
       {expenseCategory && (
-        <p>This is how much you have left for this {expenseCategory}: Amount</p>
+        <p>
+          You have spent {amountValue} for {expenseCategory}
+        </p>
       )}
 
       <button onClick={handleShowExpense}>Add another expense</button>
