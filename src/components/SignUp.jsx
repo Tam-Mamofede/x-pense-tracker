@@ -13,6 +13,7 @@ function SignUp() {
     createAccount,
     isAuthenticated,
     createAccountWithGoogle,
+    handleSetName,
   } = useAuth();
 
   return (
@@ -21,7 +22,7 @@ function SignUp() {
         type="text"
         value={userName}
         placeholder="What is your name?"
-        onChange={(e) => setUserName(e.target.value)}
+        onChange={handleSetName}
       />
       {userName && (
         <>

@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth, googleProvider, db } from "../../Config/firebase.config";
 import {
+  browserLocalPersistence,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -23,6 +25,36 @@ function AuthProvider({ children }) {
 
   const [logInEmail, setLogInEmail] = useState("");
   const [logInPassword, setLogInPassword] = useState("");
+
+  const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours duration of log in
+  // Set session persistence
+  useEffect(() => {
+    setPersistence(auth, browserLocalPersistence).catch((error) =>
+      console.error("Persistence error:", error)
+    );
+  }, []);
+
+  // Monitor authentication state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        const loginTime = localStorage.getItem("loginTime");
+        if (loginTime && new Date().getTime() - loginTime > SESSION_DURATION) {
+          logOut(); // Log out if session expired
+        } else {
+          setUser(currentUser);
+          setIsAuthenticated(true);
+          localStorage.setItem("loginTime", new Date().getTime());
+        }
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   //sign up with email and password
   const createAccount = async () => {
     try {
@@ -86,6 +118,17 @@ function AuthProvider({ children }) {
     }
   };
 
+  ///////////////////////////////////////////////
+  const handleSetName = (e) => {
+    const value = e.target.value;
+    // Capitalize the first letter
+    const capitalizedValue =
+      value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+    setUserName(capitalizedValue);
+  };
+
+  //////////////////////////////////////////////////
+
   const logOut = async () => {
     try {
       await signOut(auth);
@@ -108,8 +151,14 @@ function AuthProvider({ children }) {
       setIsAuthenticated(true);
       setUser(auth.currentUser);
       const inputedMonth = prompt("Which month do you want to see?");
-      {
-        inputedMonth ? setSelectedMonth(inputedMonth) : "";
+      if (inputedMonth) {
+        // Capitalize the first letter and make the rest lowercase
+        const formattedMonth =
+          inputedMonth.charAt(0).toUpperCase() +
+          inputedMonth.slice(1).toLowerCase();
+        setSelectedMonth(formattedMonth);
+      } else {
+        setSelectedMonth("");
       }
       navigate("/dashboard");
     } catch (err) {
@@ -142,6 +191,7 @@ function AuthProvider({ children }) {
           setLogInPassword,
           selectedMonth,
           setSelectedMonth,
+          handleSetName,
         }}
       >
         {children}

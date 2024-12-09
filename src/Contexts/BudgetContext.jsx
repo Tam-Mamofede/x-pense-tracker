@@ -51,6 +51,15 @@ function BudgetProvider({ children }) {
     setIsMonth(true);
     setSelectedMonth(month);
   };
+  /////////////////////////////////////////////
+
+  const handleSetCategory = (e) => {
+    const value = e.target.value;
+    // Capitalize the first letter
+    const capitalizedValue =
+      value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+    setCategory(capitalizedValue);
+  };
 
   /////////////////////////////////////////////////////
   const fetchCategories = async (uid) => {
@@ -80,7 +89,15 @@ function BudgetProvider({ children }) {
       console.error("Error fetching categories:", error);
     }
   };
+  /////////////////////////////////////////////////
 
+  const handleMonthInput = (e) => {
+    const value = e.target.value;
+    // Capitalize the first letter
+    const capitalizedValue =
+      value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+    setMonth(capitalizedValue);
+  };
   ///////////////////////////////////////////////////////
   const handleSetBudget = async (event) => {
     event.preventDefault();
@@ -153,15 +170,18 @@ function BudgetProvider({ children }) {
   //change month anywhere in app
   const handleChangeMonth = () => {
     const inputedMonth = prompt("Which month do you want to see?");
-    {
-      inputedMonth
-        ? setSelectedMonth(inputedMonth)
-        : alert("Please input the month you would like to see.");
+
+    if (inputedMonth) {
+      const formattedMonth =
+        inputedMonth.charAt(0).toUpperCase() +
+        inputedMonth.slice(1).toLowerCase();
+      setSelectedMonth(formattedMonth);
+    } else {
+      alert("Please input the month you would like to see.");
     }
   };
 
   //////////////////////////////////////////////////////////////////////////
-  // Listen for authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -216,6 +236,8 @@ function BudgetProvider({ children }) {
         handleDeleteEntry,
         handleChangeMonth,
         catIDs,
+        handleMonthInput,
+        handleSetCategory,
       }}
     >
       {children}

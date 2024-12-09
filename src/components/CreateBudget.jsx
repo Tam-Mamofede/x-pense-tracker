@@ -6,17 +6,16 @@ import { useAuth } from "../Contexts/AuthContext";
 function CreateBudget() {
   const {
     month,
-    setMonth,
     amount,
     setAmount,
     category,
-    setCategory,
     handleSetBudget,
     isMonth,
     setIsMonth,
     handleSetMonth,
-    setCategories,
     handleChangeMonth,
+    handleMonthInput,
+    handleSetCategory,
   } = useBudget();
 
   const { selectedMonth, setSelectedMonth } = useAuth();
@@ -51,22 +50,14 @@ function CreateBudget() {
       {!selectedMonth && (
         <>
           <label htmlFor="month">Month</label>
-          <input
-            type="text"
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-          />
+          <input type="text" value={month} onChange={handleMonthInput} />
           <button onClick={handleSetMonth}>Submit</button>
         </>
       )}
       {isMonth && (
         <div>
           <label htmlFor="category">Category</label>
-          <input
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          />
+          <input type="text" value={category} onChange={handleSetCategory} />
 
           <label htmlFor="amount">Amount</label>
           <input
