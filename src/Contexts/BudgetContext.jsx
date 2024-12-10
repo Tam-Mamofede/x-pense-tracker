@@ -238,6 +238,7 @@ function BudgetProvider({ children }) {
         catIDs,
         handleMonthInput,
         handleSetCategory,
+        handleDeleteMonth,
       }}
     >
       {children}

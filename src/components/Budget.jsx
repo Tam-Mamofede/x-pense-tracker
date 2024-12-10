@@ -3,7 +3,8 @@ import { useBudget } from "../Contexts/BudgetContext";
 import { useAuth } from "../Contexts/AuthContext";
 
 function Budget() {
-  const { month, handleDeleteEntry, categories } = useBudget();
+  const { month, handleDeleteEntry, categories, handleDeleteMonth } =
+    useBudget();
   const { selectedMonth } = useAuth();
 
   return (

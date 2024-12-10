@@ -26,35 +26,6 @@ function AuthProvider({ children }) {
   const [logInEmail, setLogInEmail] = useState("");
   const [logInPassword, setLogInPassword] = useState("");
 
-  const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours duration of log in
-  // Set session persistence
-  useEffect(() => {
-    setPersistence(auth, browserLocalPersistence).catch((error) =>
-      console.error("Persistence error:", error)
-    );
-  }, []);
-
-  // Monitor authentication state
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        const loginTime = localStorage.getItem("loginTime");
-        if (loginTime && new Date().getTime() - loginTime > SESSION_DURATION) {
-          logOut(); // Log out if session expired
-        } else {
-          setUser(currentUser);
-          setIsAuthenticated(true);
-          localStorage.setItem("loginTime", new Date().getTime());
-        }
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
   //sign up with email and password
   const createAccount = async () => {
     try {
