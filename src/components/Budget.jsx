@@ -3,14 +3,15 @@ import { useBudget } from "../Contexts/BudgetContext";
 import { useAuth } from "../Contexts/AuthContext";
 
 function Budget() {
-  const { month, handleDeleteEntry, categories, handleDeleteMonth } =
-    useBudget();
+  const { month, handleDeleteEntry, categories } = useBudget();
   const { selectedMonth } = useAuth();
 
   return (
     <>
       <div>
-        <h1>This is your budget for {selectedMonth || month}</h1>
+        <h1 className="font-extrabold text-green-700 ">
+          This is your budget for {selectedMonth || month}
+        </h1>
       </div>
       {!categories && <p>Loading categories...</p>}
       {categories.length === 0 && <p>No categories found.</p>}

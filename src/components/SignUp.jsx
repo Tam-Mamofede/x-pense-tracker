@@ -42,7 +42,7 @@ function SignUp() {
           <button onClick={createAccountWithGoogle}>Google</button>
         </>
       )}
-      <p>
+      <p className="font-extrabold text-green-700 ">
         Already have an account?
         <span>
           <NavLink to="/log-in">Log in</NavLink>
