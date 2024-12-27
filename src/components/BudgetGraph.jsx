@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { db } from "../../Config/firebase.config";
+import { db } from "../../firebase.config";
 import { doc, collection, getDocs, getDoc } from "firebase/firestore";
 import { useBudget } from "../Contexts/BudgetContext";
 import { useAuth } from "../Contexts/AuthContext";
@@ -23,7 +23,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 function LineChart() {
@@ -106,7 +106,7 @@ function LineChart() {
               console.warn(`No expense found for category: ${cat.Category}`);
               return 0; // Default value if no document
             }
-          })
+          }),
         );
 
         setExAmt(expenses); // Set expenses as an array

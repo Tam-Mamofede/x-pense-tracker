@@ -9,7 +9,7 @@ import {
   updateDoc,
   addDoc,
 } from "firebase/firestore";
-import { auth, db } from "../../Config/firebase.config";
+import { auth, db } from "../../firebase.config";
 import { useAuth } from "./AuthContext";
 import { onAuthStateChanged } from "firebase/auth";
 

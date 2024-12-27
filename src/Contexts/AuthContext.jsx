@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth, googleProvider, db } from "../../Config/firebase.config";
+import { auth, googleProvider, db } from "../../firebase.config";
 import {
   browserLocalPersistence,
   createUserWithEmailAndPassword,
@@ -32,7 +32,7 @@ function AuthProvider({ children }) {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       setIsAuthenticated(true);
       const newUser = userCredential.user;
