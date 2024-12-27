@@ -1,8 +1,12 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth, googleProvider, db } from "../../Config/firebase.config";
+/* eslint-disable react/prop-types */
+import React, { createContext, useContext, useState } from "react";
+import { auth, googleProvider, db } from "../../firebase.config";
 import {
   createUserWithEmailAndPassword,
+<<<<<<< Updated upstream
   onAuthStateChanged,
+=======
+>>>>>>> Stashed changes
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -29,7 +33,7 @@ function AuthProvider({ children }) {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       setIsAuthenticated(true);
       const newUser = userCredential.user;

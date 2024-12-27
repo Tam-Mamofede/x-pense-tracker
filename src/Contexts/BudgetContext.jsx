@@ -1,15 +1,13 @@
+/* eslint-disable react/prop-types */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   doc,
   setDoc,
   collection,
-  getDoc,
   deleteDoc,
   getDocs,
-  updateDoc,
-  addDoc,
 } from "firebase/firestore";
-import { auth, db } from "../../Config/firebase.config";
+import { auth, db } from "../../firebase.config";
 import { useAuth } from "./AuthContext";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -216,6 +214,12 @@ function BudgetProvider({ children }) {
         handleDeleteEntry,
         handleChangeMonth,
         catIDs,
+<<<<<<< Updated upstream
+=======
+        handleMonthInput,
+        handleSetCategory,
+        isBudget,
+>>>>>>> Stashed changes
       }}
     >
       {children}

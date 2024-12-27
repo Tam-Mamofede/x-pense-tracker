@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import React, { createContext, useContext, useState } from "react";
 import { useBudget } from "./BudgetContext";
-import { collection, doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
-import { db } from "../../Config/firebase.config";
+import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase.config";
 import { useAuth } from "./AuthContext";
 
 const ExpenseContext = createContext();
@@ -53,7 +54,7 @@ function ExpenseProvider({ children }) {
             await updateDoc(
               docRef,
               { Amount: calcAmount, Expense: totalSpent },
-              { merge: true }
+              { merge: true },
             );
           } else {
             await updateDoc(docRef, {
@@ -66,13 +67,13 @@ function ExpenseProvider({ children }) {
         }
       } else {
         alert(
-          "You have not set a budget for this category, so we cannot deduct your expense"
+          "You have not set a budget for this category, so we cannot deduct your expense",
         );
       }
     } catch (error) {
       console.error("Error submitting expense:", error);
       alert(
-        "An error occurred while submitting your expense. Please try again."
+        "An error occurred while submitting your expense. Please try again.",
       );
     } finally {
       setShowExpense(false);
@@ -93,6 +94,9 @@ function ExpenseProvider({ children }) {
         setExpenseAmount,
         handleSubmitExpense,
         amountValue,
+        setIsSubmitExpense,
+        isSubmitExpense,
+        setAmountValue,
       }}
     >
       {children}
