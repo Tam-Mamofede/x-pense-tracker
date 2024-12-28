@@ -1,13 +1,11 @@
+/* eslint-disable react/prop-types */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   doc,
   setDoc,
   collection,
-  getDoc,
   deleteDoc,
   getDocs,
-  updateDoc,
-  addDoc,
 } from "firebase/firestore";
 import { auth, db } from "../../firebase.config";
 import { useAuth } from "./AuthContext";
@@ -238,6 +236,7 @@ function BudgetProvider({ children }) {
         catIDs,
         handleMonthInput,
         handleSetCategory,
+        isBudget,
       }}
     >
       {children}

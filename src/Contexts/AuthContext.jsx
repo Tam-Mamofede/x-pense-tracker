@@ -1,10 +1,8 @@
+/* eslint-disable react/prop-types */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth, googleProvider, db } from "../../firebase.config";
 import {
-  browserLocalPersistence,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -22,7 +20,9 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState("");
   const navigate = useNavigate();
-
+  const [openLogin, setOpenLogin] = useState(false);
+  const [blurBg, setBlurBg] = useState(false);
+  const [openInputs, setOpenInputs] = useState(false);
   const [logInEmail, setLogInEmail] = useState("");
   const [logInPassword, setLogInPassword] = useState("");
 
@@ -96,6 +96,8 @@ function AuthProvider({ children }) {
     const capitalizedValue =
       value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
     setUserName(capitalizedValue);
+    setBlurBg(true);
+    setOpenInputs(true);
   };
 
   //////////////////////////////////////////////////
@@ -163,6 +165,12 @@ function AuthProvider({ children }) {
           selectedMonth,
           setSelectedMonth,
           handleSetName,
+          openLogin,
+          setOpenLogin,
+          blurBg,
+          setBlurBg,
+          openInputs,
+          setOpenInputs,
         }}
       >
         {children}
