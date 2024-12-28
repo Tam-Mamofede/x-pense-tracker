@@ -14,12 +14,12 @@ function Homepage() {
 
       {/* Skewed section */}
       <div className="flex h-2/3 w-full flex-grow -skew-y-12 bg-[#1f4529]">
-        <h1 className="bottom-15 absolute right-10 skew-y-0 transform">
-          Help your wallet
-          <span className="font-extrabold"> stick to the plan!</span>
-        </h1>
-
         <div className="flex flex-grow skew-y-12 items-end justify-end">
+          <h1 className="relative bottom-80 right-5 skew-y-0 transform text-right text-2xl font-medium text-[#fffcf9]">
+            Help your wallet
+            <br />
+            <span className="font-extrabold"> stick to the plan!</span>
+          </h1>
           <img
             src="../../assets/3d-img.png"
             alt="Another decorative element"
