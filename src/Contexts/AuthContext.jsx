@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { auth, googleProvider, db } from "../../firebase.config";
 import {
   createUserWithEmailAndPassword,
@@ -21,6 +21,7 @@ function AuthProvider({ children }) {
   const [selectedMonth, setSelectedMonth] = useState("");
   const navigate = useNavigate();
   const [openLogin, setOpenLogin] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState(false);
   const [blurBg, setBlurBg] = useState(false);
   const [openInputs, setOpenInputs] = useState(false);
   const [logInEmail, setLogInEmail] = useState("");
@@ -171,6 +172,8 @@ function AuthProvider({ children }) {
           setBlurBg,
           openInputs,
           setOpenInputs,
+          openSignUp,
+          setOpenSignUp,
         }}
       >
         {children}

@@ -14,29 +14,23 @@ function SignUp() {
     handleSetName,
     setOpenLogin,
     blurBg,
-    setBlurBg,
     openInputs,
-    setOpenInputs,
-    setUserName,
+    setOpenSignup,
   } = useAuth();
 
   const handleOpenLogin = () => {
     setOpenLogin(true);
+    setOpenSignup(false);
   };
 
   return (
     <div
       className={classNames(
-        "fixed inset-0 z-50 flex max-h-fit items-center justify-center",
+        "fixed inset-x-0 top-80 z-50 flex max-h-fit items-center justify-center lg:inset-x-1/4 lg:top-96 lg:w-2/4",
         {
           "bg-gray-800 bg-opacity-50 backdrop-blur-sm": blurBg,
         },
       )}
-      onClick={() => {
-        setBlurBg(false);
-        setOpenInputs(false);
-        setUserName("");
-      }}
     >
       <div className="absolute z-10 mb-[168px] h-[90px] w-3/4 rounded-lg bg-[#e3f0af] shadow-md">
         <div className="mb-2 mt-5 flex flex-row space-x-10 pl-8">
@@ -49,31 +43,54 @@ function SignUp() {
           </h1>
         </div>
 
-        <div className="relative z-20 h-fit w-full space-y-1 rounded-2xl bg-white p-6 shadow-lg">
-          <input
-            type="text"
-            value={userName}
-            placeholder="What is your name?"
-            onChange={handleSetName}
-          />
-          {openInputs && (
-            <>
-              <label>Enter your email</label>
-              <input
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <label>Enter your password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button onClick={createAccount}>Sign up</button>
-              <button onClick={createAccountWithGoogle}>Google</button>
-            </>
-          )}
+        <div className="relative z-20 h-fit w-full space-y-8 rounded-2xl bg-white p-6 shadow-lg">
+          <div className="flex flex-col space-y-2">
+            <label>Enter your name</label>
+            <input
+              type="text"
+              value={userName}
+              onChange={handleSetName}
+              className="rounded-xl border px-1 py-1"
+            />
+            {openInputs && (
+              <>
+                <div className="flex flex-col space-y-2">
+                  <label>Enter your email</label>
+                  <input
+                    type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="rounded-xl border px-1 py-1"
+                  />
+                </div>
+
+                <div className="flex flex-col space-y-2">
+                  <label>Enter your password</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="rounded-xl border px-1 py-1"
+                  />
+                </div>
+
+                <div className="flex flex-row justify-between">
+                  <button
+                    onClick={createAccount}
+                    className="w-fit rounded-2xl bg-[#1f4529] px-4 py-2 text-center text-[#e3f0af]"
+                  >
+                    Sign up
+                  </button>
+                  <button
+                    onClick={createAccountWithGoogle}
+                    className="w-fit rounded-2xl bg-[#e3f0af] px-4 py-2 text-center"
+                  >
+                    Google
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
