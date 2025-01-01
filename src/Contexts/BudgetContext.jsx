@@ -241,6 +241,7 @@ function BudgetProvider({ children }) {
         isBudget,
         popupOpen,
         setPopupOpen,
+        setSelectedMonth,
       }}
     >
       {children}

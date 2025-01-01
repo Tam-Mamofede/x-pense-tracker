@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useAuth } from "../Contexts/AuthContext";
 import { NavLink } from "react-router-dom";
 import Budget from "../components/Budget";
@@ -13,11 +13,29 @@ function Dashboard() {
   const { selectedMonth } = useAuth();
   const { handleChangeMonth, categories, popupOpen, setPopupOpen } =
     useBudget();
-  const { showExpense } = useExpense();
-
-  const handleShowPopup = () => setPopupOpen(!popupOpen);
+  const {
+    showExpense,
+    expenseRef,
+    expenseCategory,
+    amountValue,
+    handleShowExpense,
+  } = useExpense();
+  const budgetRef = useRef(null);
   const buttonStyles =
     "w-fit rounded-xl bg-[#e3f0af] px-4 py-2 text-center font-semibold text-[#1f4529] shadow-md";
+
+  const handleShowPopup = () => {
+    setPopupOpen(!popupOpen);
+    setTimeout(() => {
+      // Scroll to CreateBudget after it is rendered
+      if (budgetRef.current) {
+        budgetRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 0);
+  };
 
   return (
     <div className="scrollable-container relative flex flex-col overflow-hidden bg-[#fffcf9] pb-8">
@@ -36,27 +54,39 @@ function Dashboard() {
                 </NavLink>
               ) : (
                 <button onClick={handleShowPopup} className={buttonStyles}>
-                  {popupOpen === false ? "Add more" : "Close"}
+                  {popupOpen === false ? "Add budget" : "Cancel"}
                 </button>
               )}
               <button onClick={handleChangeMonth} className={buttonStyles}>
                 Change month
               </button>
+              <button onClick={handleShowExpense} className={buttonStyles}>
+                {showExpense === true ? "Cancel" : "Add expense"}
+              </button>
             </div>
-            <div>{popupOpen && <CreateBudget />}</div>
+            <div>{popupOpen && <CreateBudget ref={budgetRef} />}</div>
           </>
         ) : (
-          <>
-            <p>
-              Start you budgeting journey.
-              <NavLink to="/create-budget"> Click here!</NavLink>{" "}
-              <button onClick={handleChangeMonth} className={buttonStyles}>
-                change month
+          <div className="flex h-screen w-4/5 flex-col items-center justify-center space-y-6 p-4">
+            <p className="font-extrabold">Start you budgeting journey.</p>
+            <div className="flex flex-col items-center space-y-4">
+              <button onClick={handleShowPopup} className={buttonStyles}>
+                Create a new budget
               </button>
-            </p>
-          </>
+              <button onClick={handleChangeMonth} className={buttonStyles}>
+                Change month
+              </button>
+            </div>
+          </div>
         )}
-        <> {showExpense == true && <Expense />}</>
+        <>
+          {showExpense == true && <Expense ref={expenseRef} />}
+          {expenseCategory && (
+            <p>
+              You have spent {amountValue} for {expenseCategory}
+            </p>
+          )}
+        </>
       </div>
     </div>
   );

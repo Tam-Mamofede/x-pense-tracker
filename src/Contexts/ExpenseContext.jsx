@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useRef } from "react";
 import { useBudget } from "./BudgetContext";
-import { collection, doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase.config";
 import { useAuth } from "./AuthContext";
 
@@ -16,9 +16,27 @@ function ExpenseProvider({ children }) {
   const [expenseAmount, setExpenseAmount] = useState("");
   const [amountValue, setAmountValue] = useState();
   const [isSubmitExpense, setIsSubmitExpense] = useState(false);
+  const expenseRef = useRef(null);
 
   const handleShowExpense = () => {
     showExpense === false ? setShowExpense(true) : setShowExpense(false);
+    setTimeout(() => {
+      // Scroll to CreateBudget after it is rendered
+      if (expenseRef.current) {
+        expenseRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 0);
+  };
+
+  const handleSetExpCat = (e) => {
+    const value = e.target.value;
+    // Capitalize the first letter
+    const capitalizedValue =
+      value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+    setExpenseCategory(capitalizedValue);
   };
 
   const handleSubmitExpense = async () => {
@@ -97,6 +115,8 @@ function ExpenseProvider({ children }) {
         setAmountValue,
         isSubmitExpense,
         setIsSubmitExpense,
+        expenseRef,
+        handleSetExpCat,
       }}
     >
       {children}

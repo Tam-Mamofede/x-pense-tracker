@@ -1,14 +1,32 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useAuth } from "../Contexts/AuthContext";
-import { useExpense } from "../Contexts/ExpenseContext";
+import { useBudget } from "../Contexts/BudgetContext";
 
 function Navigation() {
   const { logOut } = useAuth();
-  const { handleShowExpense } = useExpense();
   const [isOpen, setIsOpen] = useState(false);
-
+  const { setSelectedMonth, setPopupOpen, isMonth, selectedMonth } =
+    useBudget();
+  const budgetRef = useRef(null);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleCreateNewBudget = () => {
+    setPopupOpen(true);
+    setSelectedMonth("");
+    console.log("selectedMonth:", selectedMonth);
+    console.log("isMonth:", isMonth);
+
+    setTimeout(() => {
+      // Scroll to CreateBudget after it is rendered
+      if (budgetRef.current) {
+        budgetRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 0);
   };
 
   return (
@@ -31,12 +49,14 @@ function Navigation() {
             isOpen ? "opacity-90" : "pointer-events-none opacity-0"
           } sm:pointer-events-auto sm:static sm:flex-row sm:space-x-4 sm:space-y-0 sm:opacity-100`}
         >
-          <p onClick={handleShowExpense} className="hover:underline">
-            Log an expense
+          <p
+            className="hover:cursor-pointer hover:underline"
+            onClick={handleCreateNewBudget}
+          >
+            Create new budget
           </p>
-          <p className="hover:underline">Create new budget</p>
 
-          <p onClick={logOut} className="hover:underline">
+          <p onClick={logOut} className="hover:cursor-pointer hover:underline">
             Log out
           </p>
         </div>

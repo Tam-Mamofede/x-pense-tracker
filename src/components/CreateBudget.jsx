@@ -1,8 +1,8 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { useBudget } from "../Contexts/BudgetContext";
 import { useAuth } from "../Contexts/AuthContext";
 
-function CreateBudget() {
+const CreateBudget = forwardRef((props, ref) => {
   const {
     month,
     setMonth,
@@ -34,26 +34,12 @@ function CreateBudget() {
         ? "bg-[#e3f0af] text-[#1f4529]"
         : "bg-gray-300 text-gray-500 cursor-not-allowed"
     }`;
+  // console.log("selectedMonth:", selectedMonth);
+  // console.log("isMonth:", isMonth);
 
   return (
-    <div className="my-4 flex flex-col items-center">
-      {!selectedMonth && (
-        <div className="flex flex-col space-y-2">
-          <label htmlFor="month">Month</label>
-          <input
-            type="text"
-            id="month"
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            className="rounded-xl border border-[#1f4529] px-2 py-1"
-            aria-label="Enter month"
-          />
-          <button onClick={handleSetMonth} className={buttonClass(true)}>
-            Submit
-          </button>
-        </div>
-      )}
-      {isMonth && (
+    <div ref={ref} className="my-4 flex flex-col items-center">
+      {selectedMonth ? (
         <div className="m-4 max-w-md rounded-lg bg-[#e3f0af] pt-4 font-bold text-[#1f4529] shadow-md">
           <h1 className="mb-2 text-center text-lg">Plan your wallet!</h1>
           <div className="flex flex-col space-y-4 rounded-2xl bg-[#fffcf9] p-4">
@@ -77,14 +63,14 @@ function CreateBudget() {
                 aria-label="Enter budget amount"
               />
               {!isValidAmount && (
-                <p className="text-red-500">Enter a valid positive amount</p>
+                <p className="text-red-400">Enter a valid positive amount</p>
               )}
             </div>
             <div className="flex flex-col items-center space-y-4 py-4">
               <button
                 onClick={handleSetBudget}
                 disabled={!isFormValid}
-                className={buttonClass(isFormValid)}
+                className={buttonClass}
               >
                 Submit budget
               </button>
@@ -97,9 +83,26 @@ function CreateBudget() {
             </div>
           </div>
         </div>
+      ) : (
+        <div className="flex flex-col space-y-2">
+          <label htmlFor="month">Month</label>
+          <input
+            type="text"
+            id="month"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            className="rounded-xl border border-[#1f4529] px-2 py-1"
+            aria-label="Enter month"
+          />
+          <button onClick={handleSetMonth} className={buttonClass(true)}>
+            Submit
+          </button>
+        </div>
       )}
     </div>
   );
-}
+});
+
+CreateBudget.displayName = "CreateBudget";
 
 export default CreateBudget;
