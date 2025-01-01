@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useBudget } from "./BudgetContext";
 import { collection, doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
@@ -17,7 +18,7 @@ function ExpenseProvider({ children }) {
   const [isSubmitExpense, setIsSubmitExpense] = useState(false);
 
   const handleShowExpense = () => {
-    setShowExpense(true);
+    showExpense === false ? setShowExpense(true) : setShowExpense(false);
   };
 
   const handleSubmitExpense = async () => {
@@ -93,6 +94,9 @@ function ExpenseProvider({ children }) {
         setExpenseAmount,
         handleSubmitExpense,
         amountValue,
+        setAmountValue,
+        isSubmitExpense,
+        setIsSubmitExpense,
       }}
     >
       {children}

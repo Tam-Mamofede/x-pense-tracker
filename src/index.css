@@ -2,7 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark green: #557B83
-Semi- dark: #39AEA9
-Light: #A2D5AB
-Lightest Green: #E5EFC1 */
+html,
+body {
+  overflow: hidden;
+  height: 100%;
+  margin: 0;
+  font-family: "Comfortaa";
+}
+
+/* Hide scrollbar for WebKit browsers */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE and Edge */
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Allow scrolling for inner content (scrollable container) */
+.scrollable-container {
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  max-height: 100vh;
+}

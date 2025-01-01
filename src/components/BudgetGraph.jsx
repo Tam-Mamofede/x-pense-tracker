@@ -44,7 +44,7 @@ function LineChart() {
           {
             label: "Budget Amounts",
             data: budgetData,
-            borderColor: "rgba(75, 192, 192, 1)",
+            borderColor: "#1f4529",
             backgroundColor: "rgba(75, 192, 192, 0.2)",
             borderWidth: 2,
             tension: 0.4,
@@ -52,7 +52,7 @@ function LineChart() {
           {
             label: "Expenses",
             data: exAmt, // Use the expenses array here
-            borderColor: "rgba(255, 0, 0, 1)",
+            borderColor: "rgb(248 113 113)",
             backgroundColor: "rgba(255, 0, 0, 0.2)",
             borderWidth: 2,
             tension: 0.4,
@@ -61,6 +61,42 @@ function LineChart() {
       });
     }
   }, [categories, exAmt]);
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top",
+        align: "center",
+        labels: {
+          boxWidth: 60,
+          boxHeight: 40,
+          padding: 10,
+          usePointStyle: true,
+        },
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        beginAtZero: true,
+        grid: {
+          display: false,
+        },
+        ticks: {
+          stepSize: 50,
+        },
+      },
+    },
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +112,6 @@ function LineChart() {
         const categoryCollectionRef = collection(budgetDocRef, "Category");
         const querySnapshot = await getDocs(categoryCollectionRef);
         setIsEmpty(querySnapshot.empty);
-        console.log(querySnapshot.empty);
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -123,39 +158,15 @@ function LineChart() {
     return <p>No data to load on the chart. Please add some categories.</p>;
 
   return (
-    <div>
-      <h2>Budget Overview</h2>
-      <Line
-        data={chartData}
-        options={{
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "top",
-            },
-            title: {
-              display: true,
-              text: "Monthly Budget by Category",
-            },
-          },
-          scales: {
-            x: {
-              grid: {
-                display: false,
-              },
-            },
-            y: {
-              beginAtZero: true,
-              grid: {
-                display: false,
-              },
-              ticks: {
-                stepSize: 50,
-              },
-            },
-          },
-        }}
-      />
+    <div className="mb-4 flex flex-col p-4">
+      <div className="mt-4">
+        <h2 className="text-center text-xl font-extrabold text-[#1f4529]">
+          Budget for the month of {selectedMonth}
+        </h2>
+      </div>
+      <div className="h-[300px] w-[420px] p-4">
+        <Line data={chartData} options={options} />
+      </div>
     </div>
   );
 }

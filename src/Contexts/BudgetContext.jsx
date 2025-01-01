@@ -22,6 +22,7 @@ function BudgetProvider({ children }) {
   const [categories, setCategories] = useState([]);
   const [isBudget, setIsBudget] = useState(false);
   const [catIDs, setCatIDs] = useState([]);
+  const [popupOpen, setPopupOpen] = useState(false);
   // const [budgetDocId, setBudgetDocId] = useState("");
 
   //////////////////////////////////////
@@ -125,6 +126,7 @@ function BudgetProvider({ children }) {
 
       setCategory("");
       setAmount("");
+      setPopupOpen(false);
     } catch (error) {
       console.error("Error creating budgets document:", error);
     }
@@ -237,6 +239,8 @@ function BudgetProvider({ children }) {
         handleMonthInput,
         handleSetCategory,
         isBudget,
+        popupOpen,
+        setPopupOpen,
       }}
     >
       {children}

@@ -50,7 +50,7 @@ function SignUp() {
               type="text"
               value={userName}
               onChange={handleSetName}
-              className="rounded-xl border px-1 py-1"
+              className="rounded-xl border px-2 py-1"
             />
             {openInputs && (
               <>
@@ -60,7 +60,7 @@ function SignUp() {
                     type="text"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="rounded-xl border px-1 py-1"
+                    className="rounded-xl border px-2 py-1"
                   />
                 </div>
 
@@ -70,7 +70,7 @@ function SignUp() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="rounded-xl border px-1 py-1"
+                    className="rounded-xl border px-2 py-1"
                   />
                 </div>
 

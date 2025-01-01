@@ -25,7 +25,7 @@ function Homepage() {
             <h1 className="relative bottom-64 right-5 skew-y-0 transform text-right text-2xl font-medium text-[#fffcf9] lg:bottom-80 lg:right-10 lg:mb-2 lg:text-4xl">
               Help your wallet
               <br />
-              <span className="font-extrabold"> stick to the plan!</span>
+              <span className="font-black"> stick to the plan!</span>
             </h1>
             <img
               src="../../assets/3d-img.png"
