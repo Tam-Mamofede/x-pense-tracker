@@ -1,19 +1,16 @@
 import React, { forwardRef } from "react";
 import { useBudget } from "../Contexts/BudgetContext";
 import { useAuth } from "../Contexts/AuthContext";
+import SetMonth from "./SetMonth";
 
 const CreateBudget = forwardRef((props, ref) => {
   const {
-    month,
-    setMonth,
     amount,
     setAmount,
     category,
     setCategory,
     handleSetBudget,
-    isMonth,
     setIsMonth,
-    handleSetMonth,
   } = useBudget();
 
   const { selectedMonth, setSelectedMonth } = useAuth();
@@ -84,20 +81,7 @@ const CreateBudget = forwardRef((props, ref) => {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col space-y-2">
-          <label htmlFor="month">Month</label>
-          <input
-            type="text"
-            id="month"
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            className="rounded-xl border border-[#1f4529] px-2 py-1"
-            aria-label="Enter month"
-          />
-          <button onClick={handleSetMonth} className={buttonClass(true)}>
-            Submit
-          </button>
-        </div>
+        <SetMonth />
       )}
     </div>
   );

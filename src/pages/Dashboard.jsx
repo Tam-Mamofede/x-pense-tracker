@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { useAuth } from "../Contexts/AuthContext";
-import { NavLink } from "react-router-dom";
 import Budget from "../components/Budget";
 import Expense from "../components/Expense";
 import { useExpense } from "../Contexts/ExpenseContext";
@@ -11,7 +10,7 @@ import CreateBudget from "../components/CreateBudget";
 
 function Dashboard() {
   const { selectedMonth } = useAuth();
-  const { handleChangeMonth, categories, popupOpen, setPopupOpen } =
+  const { categories, popupOpen, setPopupOpen, handleChangeMonth } =
     useBudget();
   const {
     showExpense,
@@ -49,10 +48,13 @@ function Dashboard() {
 
             <div className="mt-6 flex flex-col items-center space-y-4">
               {categories.length <= 0 ? (
-                <NavLink to="/create-budget">
-                  <button className={buttonStyles}>Create a budget</button>
-                </NavLink>
+                <button onClick={handleShowPopup} className={buttonStyles}>
+                  Create a budget
+                </button>
               ) : (
+                // <NavLink to="/create-budget">
+                //   <button className={buttonStyles}>Create a budget</button>
+                // </NavLink>
                 <button onClick={handleShowPopup} className={buttonStyles}>
                   {popupOpen === false ? "Add budget" : "Cancel"}
                 </button>
@@ -70,11 +72,8 @@ function Dashboard() {
           <div className="flex h-screen w-4/5 flex-col items-center justify-center space-y-6 p-4">
             <p className="font-extrabold">Start you budgeting journey.</p>
             <div className="flex flex-col items-center space-y-4">
-              <button onClick={handleShowPopup} className={buttonStyles}>
-                Create a new budget
-              </button>
               <button onClick={handleChangeMonth} className={buttonStyles}>
-                Change month
+                Type in a month
               </button>
             </div>
           </div>

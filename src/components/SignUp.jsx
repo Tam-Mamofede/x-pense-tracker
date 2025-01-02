@@ -15,12 +15,10 @@ function SignUp() {
     setOpenLogin,
     blurBg,
     openInputs,
-    setOpenSignup,
   } = useAuth();
 
   const handleOpenLogin = () => {
     setOpenLogin(true);
-    setOpenSignup(false);
   };
 
   return (

@@ -1,33 +1,31 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../Contexts/AuthContext";
 import { useBudget } from "../Contexts/BudgetContext";
 
 function Navigation() {
   const { logOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const { setSelectedMonth, setPopupOpen, isMonth, selectedMonth } =
-    useBudget();
-  const budgetRef = useRef(null);
+  const { handleChangeMonth } = useBudget();
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleCreateNewBudget = () => {
-    setPopupOpen(true);
-    setSelectedMonth("");
-    console.log("selectedMonth:", selectedMonth);
-    console.log("isMonth:", isMonth);
+  // const handleCreateNewBudget = () => {
+  //   setPopupOpen(true);
+  //   setSelectedMonth("");
+  //   console.log("selectedMonth:", selectedMonth);
+  //   console.log("isMonth:", isMonth);
 
-    setTimeout(() => {
-      // Scroll to CreateBudget after it is rendered
-      if (budgetRef.current) {
-        budgetRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
-    }, 0);
-  };
+  //   setTimeout(() => {
+  //     // Scroll to CreateBudget after it is rendered
+  //     if (budgetRef.current) {
+  //       budgetRef.current.scrollIntoView({
+  //         behavior: "smooth",
+  //         block: "start",
+  //       });
+  //     }
+  //   }, 0);
+  // };
 
   return (
     <div className="relative z-10 shadow-md">
@@ -51,7 +49,7 @@ function Navigation() {
         >
           <p
             className="hover:cursor-pointer hover:underline"
-            onClick={handleCreateNewBudget}
+            onClick={handleChangeMonth}
           >
             Create new budget
           </p>

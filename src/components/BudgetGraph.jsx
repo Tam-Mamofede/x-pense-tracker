@@ -153,9 +153,22 @@ function LineChart() {
     getExpenses();
   }, [categories, user?.uid, selectedMonth]);
 
-  if (isEmpty) return <p>Please create your budget to see your chart</p>;
+  if (isEmpty)
+    return (
+      <div className="mt-8 flex h-2/3 w-4/5 flex-col items-center justify-center space-y-6 p-4">
+        <p className="text-center font-extrabold text-[#1f4529]">
+          Please create your budget to see your chart
+        </p>
+      </div>
+    );
   if (!chartData?.labels?.length)
-    return <p>No data to load on the chart. Please add some categories.</p>;
+    return (
+      <div className="flex h-2/3 w-4/5 flex-col items-center justify-center space-y-6 p-4">
+        <p className="text-center font-extrabold text-[#1f4529]">
+          No data to load on the chart. Please add some categories.
+        </p>
+      </div>
+    );
 
   return (
     <div className="mb-4 flex flex-col p-4">

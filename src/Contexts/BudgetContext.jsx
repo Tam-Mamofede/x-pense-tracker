@@ -169,7 +169,7 @@ function BudgetProvider({ children }) {
   ///////////////////////////////////////////////////////////////////
   //change month anywhere in app
   const handleChangeMonth = () => {
-    const inputedMonth = prompt("Which month do you want to see?");
+    const inputedMonth = prompt("Type in a month");
 
     if (inputedMonth) {
       const formattedMonth =

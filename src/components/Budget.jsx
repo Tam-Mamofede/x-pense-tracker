@@ -10,9 +10,15 @@ function Budget() {
   };
   return (
     <>
-      <div className="table-auto rounded-sm border">
+      <div className="flex table-auto flex-col items-center justify-center rounded-sm border">
         {!categories && <p>Loading categories...</p>}
-        {categories.length === 0 && <p>No categories found.</p>}
+        {categories.length === 0 && (
+          <div className="flex h-fit w-4/5 flex-col items-center justify-center space-y-2 p-4">
+            <p className="text-center font-extrabold text-[#1f4529]">
+              No categories found.
+            </p>
+          </div>
+        )}
         <thead className="bg-[#e3f0af] text-[#1f4529]">
           <tr>
             <th className="border border-[#1f4529] px-6 py-2">Category</th>
@@ -44,7 +50,7 @@ function Budget() {
               <button onClick={() => handleDeleteEntry(categoryItem.id)}>
                 Delete Entry
               </button>
-            )}{" "}
+            )}
           </>
         ))}
       </div>

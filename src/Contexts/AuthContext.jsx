@@ -111,7 +111,7 @@ function AuthProvider({ children }) {
       setSelectedMonth("");
       alert("You have successfully logged out.");
 
-      navigate("/sign-up");
+      navigate("/");
     } catch (err) {
       console.error("Logout Error:", err.message);
     }
