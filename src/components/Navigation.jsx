@@ -13,7 +13,7 @@ function Navigation() {
   return (
     <div className="relative z-10 shadow-md">
       <nav className="flex items-center justify-between bg-[#fffcf9] px-8 py-2 text-white">
-        <img src="../../public/assets/logo-dk.png" className="h-14 w-14" />
+        <img src="../../assets/logo-dk.png" className="h-14 w-14" />
 
         {/* Hamburger Menu */}
         <button
@@ -21,10 +21,7 @@ function Navigation() {
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
-          <img
-            src="../../public/assets/hamburger-dk.png"
-            className="h-12 w-12"
-          />
+          <img src="../../assets/hamburger-dk.png" className="h-12 w-12" />
         </button>
 
         {/* Menu Items */}
