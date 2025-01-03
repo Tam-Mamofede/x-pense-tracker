@@ -15,7 +15,7 @@ function Homepage() {
       <div className="relative flex h-screen flex-col items-center overflow-hidden bg-[#fffcf9]">
         <div className="mt-0 flex h-2/3 w-full items-start justify-center">
           <img
-            src="../.../public/assets/logo-name-dk.png"
+            src="../../public/assets/logo-name-dk.png"
             alt="x-pense tracker logo"
             className="mt-12 max-w-44"
           />
@@ -30,7 +30,7 @@ function Homepage() {
               <span className="font-black"> stick to the plan!</span>
             </h1>
             <img
-              src="../.../public/assets/3d-img.png"
+              src="../../public/assets/3d-img.png"
               alt="Another decorative element"
               className="absolute -bottom-11 -right-5 m-0 max-h-72 min-h-44 min-w-44 max-w-80 lg:bottom-1 lg:right-10 lg:h-[850px] lg:w-[750px]"
             />
