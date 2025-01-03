@@ -15,7 +15,7 @@ function Homepage() {
       <div className="relative flex h-screen flex-col items-center overflow-hidden bg-[#fffcf9]">
         <div className="mt-0 flex h-2/3 w-full items-start justify-center">
           <img
-            src="../../assets/logo-name-dk.png"
+            src="../.../public/assets/logo-name-dk.png"
             alt="x-pense tracker logo"
             className="mt-12 max-w-44"
           />
