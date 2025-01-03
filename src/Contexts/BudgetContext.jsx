@@ -30,8 +30,9 @@ function BudgetProvider({ children }) {
     selectedMonth,
     setSelectedMonth,
     setIsLoading,
-    isLoading,
+    setAlertMessage,
   } = useAuth();
+
   //////////////////////////////////////
   const monthNames = [
     "January",
@@ -91,8 +92,6 @@ function BudgetProvider({ children }) {
       }));
 
       setCategories(categoryList);
-
-      console.log("isLoading:", isLoading);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -190,6 +189,7 @@ function BudgetProvider({ children }) {
   ///////////////////////////////////////////////////////////////////
   //change month anywhere in app
   const handleChangeMonth = () => {
+    setIsLoading(true);
     const inputedMonth = prompt("Type in a month (e.g., January):");
 
     if (inputedMonth) {
@@ -199,11 +199,13 @@ function BudgetProvider({ children }) {
       if (monthNames.includes(formattedMonth)) {
         setSelectedMonth(formattedMonth);
       } else {
-        alert("Invalid month name. Please try again.");
+        setAlertMessage("Invalid month name. Please try again.");
       }
     } else {
-      alert("Please input a month.");
+      setAlertMessage("Please input a month.");
     }
+
+    setIsLoading(false);
   };
 
   //////////////////////////////////////////////////////////////////////////

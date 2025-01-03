@@ -12,7 +12,7 @@ function Navigation() {
 
   return (
     <div className="relative z-10 shadow-md">
-      <nav className="flex items-center justify-between bg-[#fffcf9] px-8 py-2 text-white">
+      <nav className="flex items-center justify-between bg-[#fffcf9] px-10 py-2 text-white">
         <img src="../../assets/logo-dk.png" className="h-14 w-14" />
 
         {/* Hamburger Menu */}

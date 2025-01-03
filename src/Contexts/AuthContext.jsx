@@ -58,7 +58,7 @@ function AuthProvider({ children }) {
         console.log(userData);
       }
 
-      alert("sign up successful"); // proof
+      setAlertMessage("Sign up successful"); // proof
     } catch (err) {
       console.error(err);
     } finally {
@@ -119,7 +119,7 @@ function AuthProvider({ children }) {
       setUser(null);
       setIsAuthenticated(false);
       setSelectedMonth("");
-      alert("You have successfully logged out.");
+      setAlertMessage("You have successfully logged out.");
 
       navigate("/");
     } catch (err) {
@@ -150,7 +150,7 @@ function AuthProvider({ children }) {
       navigate("/dashboard");
     } catch (err) {
       console.error("Login Error:", err.message);
-      alert("Login failed: " + err.message);
+      setAlertMessage("Login failed: " + err.message);
     } finally {
       setIsLoading(false);
     }

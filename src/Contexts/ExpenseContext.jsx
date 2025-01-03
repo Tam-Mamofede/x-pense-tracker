@@ -108,9 +108,9 @@ function ExpenseProvider({ children }) {
     setIsLoading(true);
 
     try {
-      const budgetCat = catIDs.map((cat) => cat);
+      // const budgetCat = catIDs.map((cat) => cat);
 
-      if (budgetCat.includes(expenseCategory)) {
+      if (catIDs.includes(expenseCategory)) {
         const userDocRef = doc(db, "users", user.uid);
         const monthCollectionRef = collection(userDocRef, selectedMonth);
         const budgetDocRef = doc(monthCollectionRef, "Budgets");
@@ -119,9 +119,7 @@ function ExpenseProvider({ children }) {
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
-          setAlertMessage(
-            "Budget category does not exist. Initializing the category.",
-          );
+          setAlertMessage("Budget category does not exist. Let's add one!.");
           await setDoc(docRef, { Amount: 0, Expense: 0 });
         }
 

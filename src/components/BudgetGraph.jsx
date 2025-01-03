@@ -52,7 +52,7 @@ function LineChart() {
           {
             label: "Expenses",
             data: exAmt, // Use the expenses array here
-            borderColor: "rgb(248 113 113)",
+            borderColor: "red",
             backgroundColor: "rgba(255, 0, 0, 0.2)",
             borderWidth: 2,
             tension: 0.4,
@@ -92,7 +92,7 @@ function LineChart() {
           display: false,
         },
         ticks: {
-          stepSize: 50,
+          stepSize: 1000,
         },
       },
     },
@@ -177,7 +177,7 @@ function LineChart() {
           Budget for the month of {selectedMonth}
         </h2>
       </div>
-      <div className="h-[300px] w-[420px] p-4">
+      <div className="h-[300px] w-[420px] p-4 lg:h-[500px] lg:w-[650px]">
         <Line data={chartData} options={options} />
       </div>
     </div>

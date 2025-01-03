@@ -24,11 +24,6 @@ function Alert({ message, clearMessage }) {
         <p className="text-center text-[#1f4529]">{message}</p>
       </div>
     </div>
-
-    // <div className="flex items-center space-x-2 rounded-md border border-blue-300 bg-blue-100 p-4 text-blue-800">
-    //   <span className="font-bold">Notice:</span>
-    //   <span>{message}</span>
-    // </div>
   );
 }
 
