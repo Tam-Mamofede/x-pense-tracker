@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useAuth } from "../Contexts/AuthContext";
 import { useExpense } from "../Contexts/ExpenseContext";
 import { useBudget } from "../Contexts/BudgetContext";
@@ -24,21 +24,21 @@ function Dashboard() {
   } = useExpense();
 
   const budgetRef = useRef(null);
-
   const buttonStyles =
     "w-fit rounded-xl bg-[#e3f0af] px-4 py-2 text-center font-semibold text-[#1f4529] shadow-md";
 
   const handleShowPopup = () => {
     setPopupOpen((prevState) => !prevState);
-    if (!popupOpen && budgetRef.current) {
-      setTimeout(() => {
-        budgetRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }, 0);
-    }
   };
+
+  useEffect(() => {
+    if (popupOpen && budgetRef.current) {
+      budgetRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [popupOpen]);
 
   return (
     <div className="scrollable-container relative flex flex-col overflow-hidden bg-[#fffcf9] pb-8">
