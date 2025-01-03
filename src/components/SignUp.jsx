@@ -24,7 +24,7 @@ function SignUp() {
   return (
     <div
       className={classNames(
-        "fixed inset-x-0 top-80 z-50 flex max-h-fit items-center justify-center lg:inset-x-1/4 lg:top-96 lg:w-2/4",
+        "fixed inset-x-0 top-80 z-40 flex max-h-fit items-center justify-center lg:inset-x-1/4 lg:top-96 lg:w-2/4",
         {
           "bg-gray-800 bg-opacity-50 backdrop-blur-sm": blurBg,
         },

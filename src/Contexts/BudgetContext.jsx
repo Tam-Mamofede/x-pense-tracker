@@ -14,7 +14,6 @@ import { onAuthStateChanged } from "firebase/auth";
 const BudgetContext = createContext();
 
 function BudgetProvider({ children }) {
-  const { user, setUser, selectedMonth, setSelectedMonth } = useAuth();
   const [month, setMonth] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
@@ -23,8 +22,16 @@ function BudgetProvider({ children }) {
   const [isBudget, setIsBudget] = useState(false);
   const [catIDs, setCatIDs] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [showButton, setShowButton] = useState(false);
   // const [budgetDocId, setBudgetDocId] = useState("");
-
+  const {
+    user,
+    setUser,
+    selectedMonth,
+    setSelectedMonth,
+    setIsLoading,
+    isLoading,
+  } = useAuth();
   //////////////////////////////////////
   const monthNames = [
     "January",
@@ -84,6 +91,8 @@ function BudgetProvider({ children }) {
       }));
 
       setCategories(categoryList);
+
+      console.log("isLoading:", isLoading);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -97,8 +106,16 @@ function BudgetProvider({ children }) {
       value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
     setMonth(capitalizedValue);
   };
+
+  ////////////////////////////////////////
+
+  const handleToggleDelBtn = () => {
+    showButton === false ? setShowButton(true) : setShowButton(false);
+  };
   ///////////////////////////////////////////////////////
   const handleSetBudget = async (event) => {
+    setIsLoading(true);
+
     event.preventDefault();
     if (!user || !user.uid) {
       console.error("No user is logged in. Ensure the user is authenticated.");
@@ -129,6 +146,8 @@ function BudgetProvider({ children }) {
       setPopupOpen(false);
     } catch (error) {
       console.error("Error creating budgets document:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -150,6 +169,7 @@ function BudgetProvider({ children }) {
 
   /////////////////////////////////////////////////////////////////////////////
   const handleDeleteEntry = async (docId) => {
+    setIsLoading(true);
     try {
       const userDocRef = doc(db, "users", user.uid);
       const monthCollectionRef = collection(userDocRef, selectedMonth);
@@ -159,25 +179,30 @@ function BudgetProvider({ children }) {
       await deleteDoc(catDocRef);
 
       setCategories((prevItems) => prevItems.filter((item) => item !== docId));
-
-      console.log(`${docId} has been deleted successfully`);
+      setShowButton(false);
     } catch (error) {
       console.error("Error deleting field:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   ///////////////////////////////////////////////////////////////////
   //change month anywhere in app
   const handleChangeMonth = () => {
-    const inputedMonth = prompt("Type in a month");
+    const inputedMonth = prompt("Type in a month (e.g., January):");
 
     if (inputedMonth) {
       const formattedMonth =
         inputedMonth.charAt(0).toUpperCase() +
         inputedMonth.slice(1).toLowerCase();
-      setSelectedMonth(formattedMonth);
+      if (monthNames.includes(formattedMonth)) {
+        setSelectedMonth(formattedMonth);
+      } else {
+        alert("Invalid month name. Please try again.");
+      }
     } else {
-      alert("Please input the month you would like to see.");
+      alert("Please input a month.");
     }
   };
 
@@ -242,6 +267,8 @@ function BudgetProvider({ children }) {
         popupOpen,
         setPopupOpen,
         setSelectedMonth,
+        handleToggleDelBtn,
+        showButton,
       }}
     >
       {children}

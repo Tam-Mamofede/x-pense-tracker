@@ -1,17 +1,20 @@
 import React, { useRef } from "react";
 import { useAuth } from "../Contexts/AuthContext";
-import Budget from "../components/Budget";
-import Expense from "../components/Expense";
 import { useExpense } from "../Contexts/ExpenseContext";
 import { useBudget } from "../Contexts/BudgetContext";
+import Budget from "../components/Budget";
+import Expense from "../components/Expense";
 import BudgetChart from "../components/BudgetGraph";
 import Navigation from "../components/Navigation";
 import CreateBudget from "../components/CreateBudget";
+import Loader from "../components/Loader";
 
 function Dashboard() {
-  const { selectedMonth } = useAuth();
+  const { selectedMonth, isLoading } = useAuth();
+
   const { categories, popupOpen, setPopupOpen, handleChangeMonth } =
     useBudget();
+
   const {
     showExpense,
     expenseRef,
@@ -19,25 +22,27 @@ function Dashboard() {
     amountValue,
     handleShowExpense,
   } = useExpense();
+
   const budgetRef = useRef(null);
+
   const buttonStyles =
     "w-fit rounded-xl bg-[#e3f0af] px-4 py-2 text-center font-semibold text-[#1f4529] shadow-md";
 
   const handleShowPopup = () => {
-    setPopupOpen(!popupOpen);
-    setTimeout(() => {
-      // Scroll to CreateBudget after it is rendered
-      if (budgetRef.current) {
+    setPopupOpen((prevState) => !prevState);
+    if (!popupOpen && budgetRef.current) {
+      setTimeout(() => {
         budgetRef.current.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
-      }
-    }, 0);
+      }, 0);
+    }
   };
 
   return (
     <div className="scrollable-container relative flex flex-col overflow-hidden bg-[#fffcf9] pb-8">
+      {isLoading ? <Loader /> : null}
       <Navigation />
 
       <div className="flex flex-col items-center">
@@ -79,11 +84,13 @@ function Dashboard() {
           </div>
         )}
         <>
-          {showExpense == true && <Expense ref={expenseRef} />}
+          {showExpense && <Expense ref={expenseRef} />}
           {expenseCategory && (
-            <p>
-              You have spent {amountValue} for {expenseCategory}
-            </p>
+            <div className="mt-4">
+              <p>
+                You have spent {amountValue} for {expenseCategory}
+              </p>
+            </div>
           )}
         </>
       </div>

@@ -9,10 +9,12 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import Alert from "../components/Alert";
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -26,9 +28,11 @@ function AuthProvider({ children }) {
   const [openInputs, setOpenInputs] = useState(false);
   const [logInEmail, setLogInEmail] = useState("");
   const [logInPassword, setLogInPassword] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
 
   //sign up with email and password
   const createAccount = async () => {
+    setIsLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -57,12 +61,15 @@ function AuthProvider({ children }) {
       alert("sign up successful"); // proof
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   //sign in with google account
 
   const createAccountWithGoogle = async () => {
+    setIsLoading(true);
     try {
       const userCredential = await signInWithPopup(auth, googleProvider);
       const newUser = userCredential.user;
@@ -87,6 +94,8 @@ function AuthProvider({ children }) {
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -104,6 +113,7 @@ function AuthProvider({ children }) {
   //////////////////////////////////////////////////
 
   const logOut = async () => {
+    setIsLoading(true);
     try {
       await signOut(auth);
       setUser(null);
@@ -114,12 +124,15 @@ function AuthProvider({ children }) {
       navigate("/");
     } catch (err) {
       console.error("Logout Error:", err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   ///////////////////////////////////////////
 
   const logIn = async () => {
+    setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
       setIsAuthenticated(true);
@@ -138,6 +151,8 @@ function AuthProvider({ children }) {
     } catch (err) {
       console.error("Login Error:", err.message);
       alert("Login failed: " + err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -174,8 +189,17 @@ function AuthProvider({ children }) {
           setOpenInputs,
           openSignUp,
           setOpenSignUp,
+          alertMessage,
+          setAlertMessage,
+          isLoading,
+          setIsLoading,
         }}
       >
+        {/* Render the Global Alert */}
+        <Alert
+          message={alertMessage}
+          clearMessage={() => setAlertMessage("")} // Clear message function
+        />
         {children}
       </AuthContext.Provider>
     </div>

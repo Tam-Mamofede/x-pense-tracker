@@ -2,12 +2,14 @@ import React from "react";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
 import { useAuth } from "../Contexts/AuthContext";
+import Loader from "../components/Loader";
 
 function Homepage() {
-  const { openLogin } = useAuth();
+  const { openLogin, isLoading } = useAuth();
 
   return (
     <div>
+      {isLoading ? <Loader /> : null}
       {openLogin ? <Login /> : <SignUp />}
 
       <div className="relative flex h-screen flex-col items-center overflow-hidden bg-[#fffcf9]">

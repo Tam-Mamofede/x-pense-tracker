@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { useBudget } from "../Contexts/BudgetContext";
 
 function Budget() {
-  const { handleDeleteEntry, categories } = useBudget();
-  const [showButton, setShowButton] = useState(false);
+  const { handleDeleteEntry, categories, handleToggleDelBtn, showButton } =
+    useBudget();
 
-  const handleToggleDelBtn = () => {
-    showButton === false ? setShowButton(true) : setShowButton(false);
-  };
   return (
     <>
       <div className="flex table-auto flex-col items-center justify-center rounded-sm border">

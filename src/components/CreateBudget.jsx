@@ -8,9 +8,9 @@ const CreateBudget = forwardRef((props, ref) => {
     amount,
     setAmount,
     category,
-    setCategory,
     handleSetBudget,
     setIsMonth,
+    handleSetCategory,
   } = useBudget();
 
   const { selectedMonth, setSelectedMonth } = useAuth();
@@ -46,7 +46,7 @@ const CreateBudget = forwardRef((props, ref) => {
                 type="text"
                 id="category"
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={handleSetCategory}
                 className="rounded-xl border border-[#1f4529] px-2 py-1"
                 aria-label="Enter budget category"
               />

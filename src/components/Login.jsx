@@ -1,6 +1,7 @@
 import React from "react";
 import { useAuth } from "../Contexts/AuthContext";
 import classNames from "classnames";
+import Loader from "./Loader";
 
 function Login() {
   const {
@@ -14,6 +15,7 @@ function Login() {
     blurBg,
     setBlurBg,
     setOpenLogin,
+    isLoading,
   } = useAuth();
 
   const handleOpenSignUp = () => {
@@ -25,7 +27,7 @@ function Login() {
   return (
     <div
       className={classNames(
-        "fixed inset-x-0 top-52 z-50 flex max-h-fit justify-center lg:inset-x-1/4 lg:top-64 lg:w-2/4",
+        "fixed inset-x-0 top-52 z-40 flex max-h-fit justify-center lg:inset-x-1/4 lg:top-64 lg:w-2/4",
         {
           "bg-gray-800 bg-opacity-50 backdrop-blur-sm": blurBg,
         },
@@ -34,6 +36,7 @@ function Login() {
         setBlurBg(false);
       }}
     >
+      {isLoading ? <Loader /> : null}
       <div className="absolute z-10 mb-[168px] h-[90px] w-3/4 rounded-lg bg-[#e3f0af] shadow-md">
         <div className="mb-2 mt-5 flex flex-row space-x-10 pl-8">
           <h1
