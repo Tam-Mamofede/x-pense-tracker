@@ -30,7 +30,7 @@ function Homepage() {
               <span className="font-black"> stick to the plan!</span>
             </h1>
             <img
-              src="../../assets/3d-img.png"
+              src="../.../public/assets/3d-img.png"
               alt="Another decorative element"
               className="absolute -bottom-11 -right-5 m-0 max-h-72 min-h-44 min-w-44 max-w-80 lg:bottom-1 lg:right-10 lg:h-[850px] lg:w-[750px]"
             />
