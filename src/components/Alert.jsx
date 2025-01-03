@@ -10,7 +10,7 @@ function Alert({ message, clearMessage }) {
       const timer = setTimeout(() => {
         setIsVisible(false); // Hide after 5 seconds
         clearMessage(); // Clear the message from state
-      }, 3000);
+      }, 1000);
       return () => clearTimeout(timer); // Cleanup timer on unmount
     }
   }, [message, clearMessage]);
