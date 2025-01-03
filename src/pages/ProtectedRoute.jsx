@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../Contexts/AuthContext";
@@ -7,7 +8,7 @@ function ProtectedRoute({ children }) {
 
   if (!isAuthenticated) {
     // Redirect to login if not authenticated
-    return <Navigate to="/sign-up" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;

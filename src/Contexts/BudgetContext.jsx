@@ -1,22 +1,19 @@
+/* eslint-disable react/prop-types */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   doc,
   setDoc,
   collection,
-  getDoc,
   deleteDoc,
   getDocs,
-  updateDoc,
-  addDoc,
 } from "firebase/firestore";
-import { auth, db } from "../../Config/firebase.config";
+import { auth, db } from "../../firebase.config";
 import { useAuth } from "./AuthContext";
 import { onAuthStateChanged } from "firebase/auth";
 
 const BudgetContext = createContext();
 
 function BudgetProvider({ children }) {
-  const { user, setUser, selectedMonth, setSelectedMonth } = useAuth();
   const [month, setMonth] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
@@ -24,8 +21,17 @@ function BudgetProvider({ children }) {
   const [categories, setCategories] = useState([]);
   const [isBudget, setIsBudget] = useState(false);
   const [catIDs, setCatIDs] = useState([]);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [showButton, setShowButton] = useState(false);
   // const [budgetDocId, setBudgetDocId] = useState("");
-
+  const {
+    user,
+    setUser,
+    selectedMonth,
+    setSelectedMonth,
+    setIsLoading,
+    isLoading,
+  } = useAuth();
   //////////////////////////////////////
   const monthNames = [
     "January",
@@ -50,6 +56,15 @@ function BudgetProvider({ children }) {
     }
     setIsMonth(true);
     setSelectedMonth(month);
+  };
+  /////////////////////////////////////////////
+
+  const handleSetCategory = (e) => {
+    const value = e.target.value;
+    // Capitalize the first letter
+    const capitalizedValue =
+      value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+    setCategory(capitalizedValue);
   };
 
   /////////////////////////////////////////////////////
@@ -76,13 +91,31 @@ function BudgetProvider({ children }) {
       }));
 
       setCategories(categoryList);
+
+      console.log("isLoading:", isLoading);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
+  /////////////////////////////////////////////////
 
+  const handleMonthInput = (e) => {
+    const value = e.target.value;
+    // Capitalize the first letter
+    const capitalizedValue =
+      value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+    setMonth(capitalizedValue);
+  };
+
+  ////////////////////////////////////////
+
+  const handleToggleDelBtn = () => {
+    showButton === false ? setShowButton(true) : setShowButton(false);
+  };
   ///////////////////////////////////////////////////////
   const handleSetBudget = async (event) => {
+    setIsLoading(true);
+
     event.preventDefault();
     if (!user || !user.uid) {
       console.error("No user is logged in. Ensure the user is authenticated.");
@@ -110,8 +143,11 @@ function BudgetProvider({ children }) {
 
       setCategory("");
       setAmount("");
+      setPopupOpen(false);
     } catch (error) {
       console.error("Error creating budgets document:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -133,6 +169,7 @@ function BudgetProvider({ children }) {
 
   /////////////////////////////////////////////////////////////////////////////
   const handleDeleteEntry = async (docId) => {
+    setIsLoading(true);
     try {
       const userDocRef = doc(db, "users", user.uid);
       const monthCollectionRef = collection(userDocRef, selectedMonth);
@@ -142,26 +179,34 @@ function BudgetProvider({ children }) {
       await deleteDoc(catDocRef);
 
       setCategories((prevItems) => prevItems.filter((item) => item !== docId));
-
-      console.log(`${docId} has been deleted successfully`);
+      setShowButton(false);
     } catch (error) {
       console.error("Error deleting field:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   ///////////////////////////////////////////////////////////////////
   //change month anywhere in app
   const handleChangeMonth = () => {
-    const inputedMonth = prompt("Which month do you want to see?");
-    {
-      inputedMonth
-        ? setSelectedMonth(inputedMonth)
-        : alert("Please input the month you would like to see.");
+    const inputedMonth = prompt("Type in a month (e.g., January):");
+
+    if (inputedMonth) {
+      const formattedMonth =
+        inputedMonth.charAt(0).toUpperCase() +
+        inputedMonth.slice(1).toLowerCase();
+      if (monthNames.includes(formattedMonth)) {
+        setSelectedMonth(formattedMonth);
+      } else {
+        alert("Invalid month name. Please try again.");
+      }
+    } else {
+      alert("Please input a month.");
     }
   };
 
   //////////////////////////////////////////////////////////////////////////
-  // Listen for authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -216,6 +261,14 @@ function BudgetProvider({ children }) {
         handleDeleteEntry,
         handleChangeMonth,
         catIDs,
+        handleMonthInput,
+        handleSetCategory,
+        isBudget,
+        popupOpen,
+        setPopupOpen,
+        setSelectedMonth,
+        handleToggleDelBtn,
+        showButton,
       }}
     >
       {children}

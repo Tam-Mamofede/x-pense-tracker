@@ -1,47 +1,99 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { useAuth } from "../Contexts/AuthContext";
-import { NavLink } from "react-router-dom";
-import Budget from "../components/Budget";
-import Expense from "../components/Expense";
 import { useExpense } from "../Contexts/ExpenseContext";
 import { useBudget } from "../Contexts/BudgetContext";
+import Budget from "../components/Budget";
+import Expense from "../components/Expense";
 import BudgetChart from "../components/BudgetGraph";
+import Navigation from "../components/Navigation";
+import CreateBudget from "../components/CreateBudget";
+import Loader from "../components/Loader";
 
 function Dashboard() {
-  const { logOut, selectedMonth } = useAuth();
-  const { handleChangeMonth, categories } = useBudget();
-  const { handleShowExpense, showExpense } = useExpense();
+  const { selectedMonth, isLoading } = useAuth();
+
+  const { categories, popupOpen, setPopupOpen, handleChangeMonth } =
+    useBudget();
+
+  const {
+    showExpense,
+    expenseRef,
+    expenseCategory,
+    amountValue,
+    handleShowExpense,
+  } = useExpense();
+
+  const budgetRef = useRef(null);
+
+  const buttonStyles =
+    "w-fit rounded-xl bg-[#e3f0af] px-4 py-2 text-center font-semibold text-[#1f4529] shadow-md";
+
+  const handleShowPopup = () => {
+    setPopupOpen((prevState) => !prevState);
+    if (!popupOpen && budgetRef.current) {
+      setTimeout(() => {
+        budgetRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 0);
+    }
+  };
 
   return (
-    <div>
-      <p> This is the dashboard</p>
-      <button onClick={logOut}>Log Out</button>
-      {selectedMonth ? (
+    <div className="scrollable-container relative flex flex-col overflow-hidden bg-[#fffcf9] pb-8">
+      {isLoading ? <Loader /> : null}
+      <Navigation />
+
+      <div className="flex flex-col items-center">
+        {selectedMonth ? (
+          <>
+            <BudgetChart />
+            <Budget />
+
+            <div className="mt-6 flex flex-col items-center space-y-4">
+              {categories.length <= 0 ? (
+                <button onClick={handleShowPopup} className={buttonStyles}>
+                  Create a budget
+                </button>
+              ) : (
+                // <NavLink to="/create-budget">
+                //   <button className={buttonStyles}>Create a budget</button>
+                // </NavLink>
+                <button onClick={handleShowPopup} className={buttonStyles}>
+                  {popupOpen === false ? "Add budget" : "Cancel"}
+                </button>
+              )}
+              <button onClick={handleChangeMonth} className={buttonStyles}>
+                Change month
+              </button>
+              <button onClick={handleShowExpense} className={buttonStyles}>
+                {showExpense === true ? "Cancel" : "Add expense"}
+              </button>
+            </div>
+            <div>{popupOpen && <CreateBudget ref={budgetRef} />}</div>
+          </>
+        ) : (
+          <div className="flex h-screen w-4/5 flex-col items-center justify-center space-y-6 p-4">
+            <p className="font-extrabold">Start you budgeting journey.</p>
+            <div className="flex flex-col items-center space-y-4">
+              <button onClick={handleChangeMonth} className={buttonStyles}>
+                Type in a month
+              </button>
+            </div>
+          </div>
+        )}
         <>
-          <BudgetChart />
-          <Budget />
-          {categories.length <= 0 ? (
-            <NavLink to="/create-budget">Create a budget.</NavLink>
-          ) : (
-            <NavLink to="/create-budget">Add more</NavLink>
-          )}{" "}
-          <button onClick={handleChangeMonth}>change month</button>
+          {showExpense && <Expense ref={expenseRef} />}
+          {expenseCategory && (
+            <div className="mt-4">
+              <p>
+                You have spent {amountValue} for {expenseCategory}
+              </p>
+            </div>
+          )}
         </>
-      ) : (
-        <>
-          <p>
-            Start you budgeting journey.
-            <NavLink to="/create-budget"> Click here!</NavLink>{" "}
-            <button onClick={handleChangeMonth}>change month</button>
-          </p>
-        </>
-      )}
-      <>
-        <button onClick={handleShowExpense} disabled={showExpense}>
-          Log an expense
-        </button>
-        {showExpense == true && <Expense />}
-      </>
+      </div>
     </div>
   );
 }
