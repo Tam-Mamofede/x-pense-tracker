@@ -39,14 +39,15 @@ function Budget() {
               </td>
               <td className="border border-[#1f4529] px-4 py-2">
                 {categoryItem.Expense}
-              </td>{" "}
-              {showButton === true && (
-                <td>
+              </td>
+              <td className="border border-[#1f4529] bg-red-700 px-4 py-2 text-white">
+                {" "}
+                {showButton && (
                   <button onClick={() => handleDeleteEntry(categoryItem.id)}>
                     Delete Entry
                   </button>
-                </td>
-              )}
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
