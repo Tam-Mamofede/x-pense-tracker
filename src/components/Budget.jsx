@@ -7,7 +7,7 @@ function Budget() {
 
   return (
     <>
-      <table className="w-4/5 table-fixed border-collapse flex-col items-center justify-center rounded-sm border">
+      <table className="w-4/5 table-fixed border-collapse flex-col items-center justify-center rounded-lg border">
         {!categories && <p>Loading categories...</p>}
         {categories.length === 0 && (
           <div className="flex h-fit w-4/5 flex-col items-center justify-center space-y-2 p-4">
@@ -40,9 +40,11 @@ function Budget() {
               <td className="border border-[#1f4529] px-4 py-2">
                 {categoryItem.Expense}
               </td>
-
-              {showButton && (
-                <td className="border border-[#1f4529] bg-red-700 px-4 py-2 text-white">
+              {showButton === true && (
+                <td
+                  key={`delBtn: ${categoryItem.id}`}
+                  className="border border-[#1f4529] bg-red-800 px-4 py-2 text-white hover:cursor-pointer"
+                >
                   <button onClick={() => handleDeleteEntry(categoryItem.id)}>
                     Delete Entry
                   </button>
