@@ -1,7 +1,10 @@
 import React, { forwardRef } from "react";
 import { useExpense } from "../Contexts/ExpenseContext";
+import { useAuth } from "../Contexts/AuthContext";
 
 const Expense = forwardRef((props, ref) => {
+  const { darkmode } = useAuth();
+
   const {
     expenseCategory,
     expenseAmount,
@@ -15,28 +18,40 @@ const Expense = forwardRef((props, ref) => {
 
   return (
     <div ref={ref} className="my-4 flex flex-col items-center">
-      <div className="m-4 max-w-md rounded-lg bg-[#e3f0af] pt-4 font-bold text-[#1f4529] shadow-md">
+      <div
+        className={`m-4 max-w-md rounded-lg pt-4 font-bold shadow-md lg:w-[550px] ${darkmode ? "bg-[#1f4529] text-[#e3f0af]" : "bg-[#e3f0af] text-[#1f4529]"}`}
+      >
         <h1 className="mb-2 text-center text-lg">Log your expense</h1>
-        <div className="flex flex-col space-y-4 rounded-2xl bg-[#fffcf9] p-4">
+        <div
+          className={`flex flex-col space-y-4 rounded-2xl px-8 py-4 ${darkmode ? "bg-[#2e5c3a]" : "bg-[#fffcf9]"}`}
+        >
           <div className="flex flex-col space-y-2">
-            <label htmlFor="expenseCategory">
+            <label
+              htmlFor="expenseCategory"
+              className={`whitespace-normal ${darkmode ? "text-[#f5f7ed]" : "text-black"}`}
+            >
               What category does this expense fall under?
             </label>
             <input
               type="text"
               value={expenseCategory}
               onChange={handleSetExpCat}
-              className="rounded-xl border border-[#1f4529] px-2 py-1"
+              className={`rounded-xl border px-2 py-1 ${darkmode ? "border-none bg-[#1f4529] text-white" : "bg-white"}`}
               aria-label="Enter expense category"
             />
           </div>
           <div className="flex flex-col space-y-2">
-            <label htmlFor="expenseAmount">How much did you spend?</label>
+            <label
+              htmlFor="expenseAmount"
+              className={`whitespace-normal ${darkmode ? "text-[#f5f7ed]" : "text-black"}`}
+            >
+              How much did you spend?
+            </label>
             <input
               type="text"
               value={expenseAmount}
               onChange={(e) => setExpenseAmount(Number(e.target.value))}
-              className="rounded-xl border border-[#1f4529] px-2 py-1"
+              className={`rounded-xl border px-2 py-1 ${darkmode ? "border-none bg-[#1f4529] text-white" : "bg-white"}`}
               aria-label="Enter expense category"
             />
             {!isValidAmount && (

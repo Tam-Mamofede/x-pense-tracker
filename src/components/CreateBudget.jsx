@@ -13,7 +13,7 @@ const CreateBudget = forwardRef((props, ref) => {
     handleSetCategory,
   } = useBudget();
 
-  const { selectedMonth, setSelectedMonth } = useAuth();
+  const { selectedMonth, setSelectedMonth, darkmode } = useAuth();
 
   const handleCreateNewMonth = () => {
     setIsMonth(false);
@@ -24,39 +24,43 @@ const CreateBudget = forwardRef((props, ref) => {
   const isValidAmount = !isNaN(amount) && parseFloat(amount) > 0;
   const isFormValid = category && isValidAmount;
 
-  // Dynamic button classes
-  const buttonClass = (enabled) =>
-    `w-fit rounded-2xl px-4 py-2 text-center ${
-      enabled
-        ? "bg-[#e3f0af] text-[#1f4529]"
-        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-    }`;
-  // console.log("selectedMonth:", selectedMonth);
-  // console.log("isMonth:", isMonth);
-
   return (
     <div ref={ref} className="my-4 flex flex-col items-center">
       {selectedMonth ? (
-        <div className="m-4 max-w-md rounded-lg bg-[#e3f0af] pt-4 font-bold text-[#1f4529] shadow-md">
+        <div
+          className={`m-4 max-w-md rounded-lg pt-4 font-bold shadow-md lg:w-[550px] ${darkmode ? "bg-[#1f4529] text-[#e3f0af]" : "bg-[#e3f0af] text-[#1f4529]"}`}
+        >
           <h1 className="mb-2 text-center text-lg">Plan your wallet!</h1>
-          <div className="flex flex-col space-y-4 rounded-2xl bg-[#fffcf9] p-4">
+          <div
+            className={`flex flex-col space-y-4 rounded-2xl p-4 ${darkmode ? "bg-[#2e5c3a]" : "bg-[#fffcf9]"}`}
+          >
             <div className="flex flex-col space-y-2">
-              <label htmlFor="category">Category</label>
+              <label
+                htmlFor="category"
+                className={darkmode ? "text-[#f5f7ed]" : "text-black"}
+              >
+                Category
+              </label>
               <input
                 type="text"
                 id="category"
                 value={category}
                 onChange={handleSetCategory}
-                className="rounded-xl border border-[#1f4529] px-2 py-1"
+                className={`rounded-xl border px-2 py-1 ${darkmode ? "border-none bg-[#1f4529] text-white" : "bg-white"}`}
                 aria-label="Enter budget category"
               />
-              <label htmlFor="amount">Amount</label>
+              <label
+                htmlFor="amount"
+                className={darkmode ? "text-[#f5f7ed]" : "text-black"}
+              >
+                Amount
+              </label>
               <input
                 type="text"
                 id="amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="rounded-xl border border-[#1f4529] px-2 py-1"
+                className={`rounded-xl border px-2 py-1 ${darkmode ? "border-none bg-[#1f4529] text-white" : "bg-white"}`}
                 aria-label="Enter budget amount"
               />
               {!isValidAmount && (
@@ -67,13 +71,13 @@ const CreateBudget = forwardRef((props, ref) => {
               <button
                 onClick={handleSetBudget}
                 disabled={!isFormValid}
-                className={buttonClass}
+                className="w-fit rounded-xl bg-[#1f4529] px-4 py-2 text-center font-semibold text-[#e3f0af] shadow-md"
               >
                 Submit budget
               </button>
               <button
                 onClick={handleCreateNewMonth}
-                className={buttonClass(true)}
+                className={`w-fit whitespace-normal border-none px-4 text-center font-semibold ${darkmode ? "text-[#e3f0af]" : "text-[#1f4529]"}`}
               >
                 Create budget for a new month
               </button>

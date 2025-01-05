@@ -29,6 +29,7 @@ function AuthProvider({ children }) {
   const [logInEmail, setLogInEmail] = useState("");
   const [logInPassword, setLogInPassword] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const [darkmode, setDarkmode] = useState(false);
 
   //sign up with email and password
   const createAccount = async () => {
@@ -156,6 +157,10 @@ function AuthProvider({ children }) {
     }
   };
 
+  const handleToggleDarkmode = () => {
+    setDarkmode(!darkmode);
+  };
+
   return (
     <div>
       <AuthContext.Provider
@@ -193,6 +198,9 @@ function AuthProvider({ children }) {
           setAlertMessage,
           isLoading,
           setIsLoading,
+          darkmode,
+          setDarkmode,
+          handleToggleDarkmode,
         }}
       >
         {/* Render the Global Alert */}

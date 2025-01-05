@@ -1,7 +1,9 @@
 import React from "react";
 import { useBudget } from "../Contexts/BudgetContext";
+import { useAuth } from "../Contexts/AuthContext";
 
 function Budget() {
+  const { darkmode } = useAuth();
   const { handleDeleteEntry, categories, handleToggleDelBtn, showButton } =
     useBudget();
 
@@ -23,17 +25,23 @@ function Budget() {
             <th className="border border-[#1f4529] px-6 py-2">Expense</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className={darkmode ? "text-[#e3f0af]" : null}>
           {categories.map((categoryItem) => (
             <tr key={categoryItem.id}>
               <td
                 onClick={handleToggleDelBtn}
-                className="border border-[#1f4529] px-4 py-2 hover:cursor-pointer"
+                className="break-words border border-[#1f4529] px-4 py-2 hover:cursor-pointer"
               >
                 {categoryItem.Category}
               </td>
               <td
-                className={`border border-[#1f4529] px-4 py-2 ${categoryItem.Amount < 1 && "bg-red-400"}`}
+                className={`border border-[#1f4529] px-4 py-2 ${
+                  categoryItem.Amount < 1
+                    ? darkmode
+                      ? "bg-[#310808] text-white"
+                      : "bg-red-200"
+                    : null
+                } `}
               >
                 {categoryItem.Amount}
               </td>

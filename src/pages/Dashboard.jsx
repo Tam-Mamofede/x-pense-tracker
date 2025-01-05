@@ -10,7 +10,7 @@ import CreateBudget from "../components/CreateBudget";
 import Loader from "../components/Loader";
 
 function Dashboard() {
-  const { selectedMonth, isLoading } = useAuth();
+  const { selectedMonth, isLoading, darkmode } = useAuth();
 
   const { categories, popupOpen, setPopupOpen, handleChangeMonth } =
     useBudget();
@@ -41,7 +41,9 @@ function Dashboard() {
   }, [popupOpen]);
 
   return (
-    <div className="scrollable-container relative flex flex-col overflow-hidden bg-[#fffcf9] pb-8">
+    <div
+      className={`scrollable-container relative flex flex-col overflow-hidden pb-8 ${darkmode ? "bg-[#122717]" : "bg-[#fffcf9]"}`}
+    >
       {isLoading ? <Loader /> : null}
       <Navigation />
 

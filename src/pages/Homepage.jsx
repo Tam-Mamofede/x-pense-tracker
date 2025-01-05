@@ -5,17 +5,37 @@ import { useAuth } from "../Contexts/AuthContext";
 import Loader from "../components/Loader";
 
 function Homepage() {
-  const { openLogin, isLoading } = useAuth();
+  const { openLogin, isLoading, darkmode, handleToggleDarkmode } = useAuth();
 
   return (
     <div>
       {isLoading ? <Loader /> : null}
       {openLogin ? <Login /> : <SignUp />}
+      <div
+        className="absolute left-7 top-5 z-20 mt-0 flex h-[42px] items-start"
+        onClick={handleToggleDarkmode}
+      >
+        {darkmode ? (
+          <img
+            src="../../assets/sun.png"
+            alt="dark-light mode icon"
+            className="h-6 w-6"
+          />
+        ) : (
+          <img
+            src="../../assets/moon.png"
+            alt="dark-light mode icon"
+            className="h-6 w-6"
+          />
+        )}
+      </div>
 
-      <div className="relative flex h-screen flex-col items-center overflow-hidden bg-[#fffcf9]">
+      <div
+        className={`relative flex h-screen flex-col items-center overflow-hidden ${darkmode ? "bg-[#122717]" : "bg-[#fffcf9]"}`}
+      >
         <div className="mt-0 flex h-2/3 w-full items-start justify-center">
           <img
-            src="../../assets/logo-name-dk.png"
+            src={`${darkmode ? "../../assets/logo-name-lt.png" : "../../assets/logo-name-dk.png"}`}
             alt="x-pense tracker logo"
             className="mt-12 max-w-44"
           />

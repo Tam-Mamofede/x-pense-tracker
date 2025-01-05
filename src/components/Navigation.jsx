@@ -3,7 +3,7 @@ import { useAuth } from "../Contexts/AuthContext";
 import { useBudget } from "../Contexts/BudgetContext";
 
 function Navigation() {
-  const { logOut } = useAuth();
+  const { logOut, darkmode, handleToggleDarkmode } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const { handleChangeMonth } = useBudget();
   const toggleMenu = () => {
@@ -12,8 +12,30 @@ function Navigation() {
 
   return (
     <div className="relative z-10 shadow-md">
-      <nav className="flex items-center justify-between bg-[#fffcf9] px-10 py-2 text-white">
-        <img src="../../assets/logo-dk.png" className="h-14 w-14" />
+      <nav
+        className={`flex items-center justify-between px-10 py-2 text-white ${darkmode ? "bg-[#1a3521]" : "bg-[#fffcf9]"}`}
+      >
+        {darkmode ? (
+          <img src="../../assets/logo-lt.png" className="h-14 w-14" />
+        ) : (
+          <img src="../../assets/logo-dk.png" className="h-14 w-14" />
+        )}
+
+        {darkmode ? (
+          <img
+            src="../../assets/sun.png"
+            alt="dark-light mode icon"
+            className="h-8 w-8"
+            onClick={handleToggleDarkmode}
+          />
+        ) : (
+          <img
+            src="../../assets/moon.png"
+            alt="dark-light mode icon"
+            className="h-8 w-8"
+            onClick={handleToggleDarkmode}
+          />
+        )}
 
         {/* Hamburger Menu */}
         <button
@@ -21,7 +43,11 @@ function Navigation() {
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
-          <img src="../../assets/hamburger-dk.png" className="h-12 w-12" />
+          {darkmode ? (
+            <img src="../../assets/hamburger-lt.png" className="h-12 w-12" />
+          ) : (
+            <img src="../../assets/hamburger-dk.png" className="h-12 w-12" />
+          )}
         </button>
 
         {/* Menu Items */}
@@ -31,13 +57,16 @@ function Navigation() {
           } sm:pointer-events-auto sm:static sm:flex-row sm:space-x-4 sm:space-y-0 sm:opacity-100`}
         >
           <p
-            className="hover:cursor-pointer hover:underline"
+            className={`hover:cursor-pointer hover:underline ${darkmode && "text-[#e3f0af]"}`}
             onClick={handleChangeMonth}
           >
             Create new budget
           </p>
 
-          <p onClick={logOut} className="hover:cursor-pointer hover:underline">
+          <p
+            onClick={logOut}
+            className={`hover:cursor-pointer hover:underline ${darkmode && "text-[#e3f0af]"}`}
+          >
             Log out
           </p>
         </div>

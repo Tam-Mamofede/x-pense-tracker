@@ -16,6 +16,7 @@ function Login() {
     setBlurBg,
     setOpenLogin,
     isLoading,
+    darkmode,
   } = useAuth();
 
   const handleOpenSignUp = () => {
@@ -37,34 +38,46 @@ function Login() {
       }}
     >
       {isLoading ? <Loader /> : null}
-      <div className="absolute z-10 mb-[168px] h-[90px] w-3/4 rounded-lg bg-[#e3f0af] shadow-md">
+      <div
+        className={`absolute z-10 mb-[168px] h-[90px] w-3/4 rounded-lg shadow-md ${darkmode ? "bg-[#1f4529]" : "bg-[#e3f0af]"}`}
+      >
         <div className="mb-2 mt-5 flex flex-row space-x-10 pl-8">
           <h1
-            className="text-lg font-semibold text-[#1f4529] opacity-20 hover:cursor-pointer"
+            className={`text-lg font-semibold opacity-20 hover:cursor-pointer ${darkmode ? "text-[#ffffff]" : "text-[#1f4529]"}`}
             onClick={handleOpenSignUp}
           >
             Sign up
           </h1>
-          <h1 className="text-lg font-semibold text-[#1f4529]">Log in</h1>
+          <h1
+            className={`text-lg font-semibold ${darkmode ? "text-[#e3f0af]" : "text-[#1f4529]"}`}
+          >
+            Log in
+          </h1>
         </div>
 
-        <div className="relative z-20 flex h-fit w-full flex-col space-y-4 rounded-2xl bg-white p-6 shadow-lg">
+        <div
+          className={`relative z-20 flex h-fit w-full flex-col space-y-4 rounded-2xl p-6 shadow-lg ${darkmode ? "bg-[#2e5c3a]" : "bg-white"}`}
+        >
           <div className="flex flex-col space-y-2">
-            <label>Enter your email</label>
+            <label className={darkmode ? "text-[#f5f7ed]" : "text-black"}>
+              Enter your email
+            </label>
             <input
               type="text"
               value={logInEmail}
               onChange={(e) => setLogInEmail(e.target.value)}
-              className="rounded-xl border px-1 py-1"
+              className={`rounded-xl border px-2 py-1 ${darkmode ? "border-none bg-[#1f4529] text-white" : "bg-white"}`}
             />
           </div>
           <div className="flex flex-col space-y-2">
-            <label>Enter your password</label>
+            <label className={darkmode ? "text-[#f5f7ed]" : "text-black"}>
+              Enter your password
+            </label>
             <input
               type="password"
               value={logInPassword}
               onChange={(e) => setLogInPassword(e.target.value)}
-              className="rounded-xl border px-1 py-1"
+              className={`rounded-xl border px-2 py-1 ${darkmode ? "border-none bg-[#1f4529] text-white" : "bg-white"}`}
             />
           </div>
           <div className="flex flex-row justify-between">

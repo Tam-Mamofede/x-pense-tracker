@@ -28,7 +28,7 @@ ChartJS.register(
 
 function LineChart() {
   const { categories } = useBudget();
-  const { user, selectedMonth } = useAuth();
+  const { user, selectedMonth, darkmode } = useAuth();
   const [isEmpty, setIsEmpty] = useState(false);
   const [chartData, setChartData] = useState({});
   const [exAmt, setExAmt] = useState("");
@@ -44,7 +44,7 @@ function LineChart() {
           {
             label: "Budget Amounts",
             data: budgetData,
-            borderColor: "#1f4529",
+            borderColor: `${darkmode ? "#e3f0af" : "#1f4529"}`,
             backgroundColor: "rgba(75, 192, 192, 0.2)",
             borderWidth: 2,
             tension: 0.4,
@@ -74,6 +74,7 @@ function LineChart() {
           boxHeight: 40,
           padding: 10,
           usePointStyle: true,
+          color: `${darkmode ? "#e3f0af" : "#1f4529"}`,
         },
       },
       title: {
@@ -85,6 +86,9 @@ function LineChart() {
         grid: {
           display: false,
         },
+        ticks: {
+          color: `${darkmode ? "#e3f0af" : "#1f4529"}`,
+        },
       },
       y: {
         beginAtZero: true,
@@ -93,6 +97,7 @@ function LineChart() {
         },
         ticks: {
           stepSize: 1000,
+          color: `${darkmode ? "#e3f0af" : "#1f4529"}`,
         },
       },
     },
@@ -156,7 +161,9 @@ function LineChart() {
   if (isEmpty)
     return (
       <div className="mt-8 flex h-2/3 w-4/5 flex-col items-center justify-center space-y-6 p-4">
-        <p className="text-center font-extrabold text-[#1f4529]">
+        <p
+          className={`text-center font-extrabold ${darkmode ? "text-[#e3f0af]" : "text-[#1f4529]"}`}
+        >
           Please create your budget to see your chart
         </p>
       </div>
@@ -164,7 +171,9 @@ function LineChart() {
   if (!chartData?.labels?.length)
     return (
       <div className="flex h-2/3 w-4/5 flex-col items-center justify-center space-y-6 p-4">
-        <p className="text-center font-extrabold text-[#1f4529]">
+        <p
+          className={`text-center font-extrabold ${darkmode ? "text-[#e3f0af]" : "text-[#1f4529]"}`}
+        >
           No data to load on the chart. Please add some categories.
         </p>
       </div>
@@ -173,7 +182,9 @@ function LineChart() {
   return (
     <div className="mb-4 flex flex-col p-4">
       <div className="mt-4">
-        <h2 className="text-center text-xl font-extrabold text-[#1f4529]">
+        <h2
+          className={`whitespace-normal text-center text-xl font-extrabold ${darkmode ? "text-[#e3f0af]" : "text-[#1f4529]"}`}
+        >
           Budget for the month of {selectedMonth}
         </h2>
       </div>
