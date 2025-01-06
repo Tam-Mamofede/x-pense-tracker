@@ -38,67 +38,6 @@ function ExpenseProvider({ children }) {
     setExpenseCategory(capitalizedValue);
   };
 
-  // const handleSubmitExpense = async () => {
-  //   if (!expenseCategory || expenseCategory.trim() === "") {
-  //     setAlertMessage("Please select a valid category.");
-  //     return;
-  //   }
-  //   if (!expenseAmount || expenseAmount <= 0) {
-  //     setAlertMessage("Please enter a valid expense amount.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const budgetCat = catIDs.map((cat) => cat);
-
-  //     if (budgetCat.includes(expenseCategory)) {
-  //       const userDocRef = doc(db, "users", user.uid);
-  //       const monthCollectionRef = collection(userDocRef, selectedMonth);
-  //       const budgetDocRef = doc(monthCollectionRef, "Budgets");
-  //       const categoryCollectionRef = collection(budgetDocRef, "Category");
-  //       const docRef = doc(categoryCollectionRef, expenseCategory);
-  //       const docSnap = await getDoc(docRef);
-
-  //       if (docSnap.exists()) {
-  //         const value = docSnap.data().Amount;
-  //         const calcAmount = Number(value) - Number(expenseAmount);
-
-  //         if (docSnap.data().Expense) {
-  //           const expenseData = docSnap.data();
-  //           const previousAmount = Number(expenseData.Expense);
-  //           const totalSpent = previousAmount + Number(expenseAmount);
-
-  //           await updateDoc(
-  //             docRef,
-  //             { Amount: calcAmount, Expense: totalSpent },
-  //             { merge: true },
-  //           );
-  //         } else {
-  //           await updateDoc(docRef, {
-  //             Amount: calcAmount,
-  //             Expense: expenseAmount,
-  //           });
-  //         }
-  //       } else {
-  //         setAlertMessage("Budget category document does not exist.");
-  //       }
-  //     } else {
-  //       setAlertMessage(
-  //         "You have not set a budget for this category, so we cannot deduct your expense.",
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Error submitting expense:", error);
-  //     setAlertMessage(
-  //       "An error occurred while submitting your expense. Please try again.",
-  //     );
-  //   } finally {
-  //     setShowExpense(false);
-  //     setExpenseAmount();
-  //     setExpenseCategory("");
-  //   }
-  // };
-
   const handleSubmitExpense = async () => {
     if (!expenseCategory || !expenseAmount || expenseAmount <= 0) {
       setAlertMessage("Please enter valid details for the expense.");
@@ -108,36 +47,35 @@ function ExpenseProvider({ children }) {
     setIsLoading(true);
 
     try {
-      // const budgetCat = catIDs.map((cat) => cat);
-
-      if (catIDs.includes(expenseCategory)) {
-        const userDocRef = doc(db, "users", user.uid);
-        const monthCollectionRef = collection(userDocRef, selectedMonth);
-        const budgetDocRef = doc(monthCollectionRef, "Budgets");
-        const categoryCollectionRef = collection(budgetDocRef, "Category");
-        const docRef = doc(categoryCollectionRef, expenseCategory);
-        const docSnap = await getDoc(docRef);
-
-        if (!docSnap.exists()) {
-          setAlertMessage("Budget category does not exist. Let's add one!.");
-          await setDoc(docRef, { Amount: 0, Expense: 0 });
-        }
-
-        const currentAmount = docSnap.data().Amount || 0;
-        const currentExpense = docSnap.data().Expense || 0;
-        const calcAmount = currentAmount - Number(expenseAmount);
-
-        await updateDoc(docRef, {
-          Amount: Math.max(calcAmount, 0), // Prevent negative amounts
-          Expense: currentExpense + Number(expenseAmount),
-        });
-
-        setAlertMessage("Expense successfully recorded.");
-      } else {
+      if (!catIDs.includes(expenseCategory)) {
         setAlertMessage(
           "You have not set a budget for this category, so we cannot deduct your expense.",
         );
+        return;
       }
+
+      const userDocRef = doc(db, "users", user.uid);
+      const monthCollectionRef = collection(userDocRef, selectedMonth);
+      const budgetDocRef = doc(monthCollectionRef, "Budgets");
+      const categoryCollectionRef = collection(budgetDocRef, "Category");
+      const docRef = doc(categoryCollectionRef, expenseCategory);
+
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        setAlertMessage(
+          "Budget category does not exist. Please create it first.",
+        );
+        return;
+      }
+
+      const { Amount = 0, Expense = 0 } = docSnap.data();
+      const newAmount = Math.max(Amount - Number(expenseAmount), 0); // Prevent negative amounts
+      const newExpense = Expense + Number(expenseAmount);
+
+      await updateDoc(docRef, { Amount: newAmount, Expense: newExpense });
+
+      setAlertMessage("Expense successfully recorded.");
     } catch (error) {
       console.error("Error submitting expense:", error);
       setAlertMessage(
