@@ -14,7 +14,7 @@ import { useAuth } from "./AuthContext";
 const ExpenseContext = createContext();
 
 function ExpenseProvider({ children }) {
-  const { catIDs, categories } = useBudget();
+  const { categories } = useBudget();
   const { user, selectedMonth, setAlertMessage, setIsLoading } = useAuth();
   const [showExpense, setShowExpense] = useState(false);
   const [expenseCategory, setExpenseCategory] = useState("");
@@ -54,7 +54,13 @@ function ExpenseProvider({ children }) {
     setIsLoading(true);
 
     try {
-      if (!catIDs.includes(expenseCategory)) {
+      // Check if the expense category exists in the categories array
+      const category = categories.find(
+        (cat) => cat.Category === expenseCategory,
+      );
+
+      // If no category found, show error
+      if (!category) {
         setAlertMessage(
           "You have not set a budget for this category, so we cannot deduct your expense.",
         );
