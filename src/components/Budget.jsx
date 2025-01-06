@@ -23,6 +23,7 @@ function Budget() {
             <th className="border border-[#1f4529] px-6 py-2">Category</th>
             <th className="border border-[#1f4529] px-6 py-2">Budget</th>
             <th className="border border-[#1f4529] px-6 py-2">Expense</th>
+            <th className="border border-[#1f4529] px-6 py-2">Remaining</th>
           </tr>
         </thead>
         <tbody className={darkmode ? "text-[#e3f0af]" : null}>
@@ -34,19 +35,22 @@ function Budget() {
               >
                 {categoryItem.Category}
               </td>
+              <td className="border border-[#1f4529] px-4 py-2">
+                {categoryItem.Amount}
+              </td>
+              <td className="border border-[#1f4529] px-4 py-2">
+                {categoryItem.Expense}
+              </td>
               <td
                 className={`border border-[#1f4529] px-4 py-2 ${
-                  categoryItem.Amount < 1
+                  categoryItem.Amount < categoryItem.Expense
                     ? darkmode
                       ? "bg-[#310808] text-white"
                       : "bg-red-200"
                     : null
                 } `}
               >
-                {categoryItem.Amount}
-              </td>
-              <td className="border border-[#1f4529] px-4 py-2">
-                {categoryItem.Expense}
+                {categoryItem.Remaining}
               </td>
               {showButton === true && (
                 <td

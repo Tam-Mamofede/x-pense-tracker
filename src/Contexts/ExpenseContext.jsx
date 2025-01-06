@@ -73,7 +73,7 @@ function ExpenseProvider({ children }) {
       const newAmount = Math.max(Amount - Number(expenseAmount), 0); // Prevent negative amounts
       const newExpense = Expense + Number(expenseAmount);
 
-      await updateDoc(docRef, { Amount: newAmount, Expense: newExpense });
+      await updateDoc(docRef, { Remaining: newAmount, Expense: newExpense });
 
       setAlertMessage("Expense successfully recorded.");
     } catch (error) {
