@@ -23,7 +23,7 @@ function BudgetProvider({ children }) {
   const [catIDs, setCatIDs] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
   const [showButton, setShowButton] = useState(false);
-  // const [budgetDocId, setBudgetDocId] = useState("");
+  const [totalBudget, setTotalBudget] = useState(0);
   const {
     user,
     setUser,
@@ -244,6 +244,21 @@ function BudgetProvider({ children }) {
       fetchDocIDs();
     }
   }, [user, selectedMonth]);
+
+  //////////////////////////////////////////
+
+  useEffect(() => {
+    if (categories && categories.length > 0) {
+      const total = categories.reduce(
+        (sum, category) => sum + (category.Amount || 0),
+        0,
+      );
+      setTotalBudget(total);
+    } else {
+      setTotalBudget(0);
+    }
+  }, [categories]);
+
   return (
     <BudgetContext.Provider
       value={{
@@ -271,6 +286,7 @@ function BudgetProvider({ children }) {
         setSelectedMonth,
         handleToggleDelBtn,
         showButton,
+        totalBudget,
       }}
     >
       {children}

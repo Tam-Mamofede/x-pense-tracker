@@ -1,20 +1,27 @@
 /* eslint-disable react/prop-types */
-import React, { createContext, useContext, useState, useRef } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from "react";
 import { useBudget } from "./BudgetContext";
-import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase.config";
 import { useAuth } from "./AuthContext";
 
 const ExpenseContext = createContext();
 
 function ExpenseProvider({ children }) {
-  const { catIDs } = useBudget();
+  const { catIDs, categories } = useBudget();
   const { user, selectedMonth, setAlertMessage, setIsLoading } = useAuth();
   const [showExpense, setShowExpense] = useState(false);
   const [expenseCategory, setExpenseCategory] = useState("");
   const [expenseAmount, setExpenseAmount] = useState("");
   const [amountValue, setAmountValue] = useState();
   const [isSubmitExpense, setIsSubmitExpense] = useState(false);
+  const [totalExpense, setTotalExpense] = useState(0);
   const expenseRef = useRef(null);
 
   const handleShowExpense = () => {
@@ -70,10 +77,10 @@ function ExpenseProvider({ children }) {
       }
 
       const { Amount = 0, Expense = 0 } = docSnap.data();
-      const newAmount = Math.max(Amount - Number(expenseAmount), 0); // Prevent negative amounts
+      const newAmount = Amount - Number(expenseAmount); // Prevent negative amounts
       const newExpense = Expense + Number(expenseAmount);
 
-      await updateDoc(docRef, { Amount: newAmount, Expense: newExpense });
+      await updateDoc(docRef, { Remaining: newAmount, Expense: newExpense });
 
       setAlertMessage("Expense successfully recorded.");
     } catch (error) {
@@ -88,6 +95,20 @@ function ExpenseProvider({ children }) {
       setExpenseCategory("");
     }
   };
+
+  ////////////////////////////////////////
+
+  useEffect(() => {
+    if (categories && categories.length > 0) {
+      const total = categories.reduce(
+        (sum, category) => sum + (category.Expense || 0),
+        0,
+      );
+      setTotalExpense(total);
+    } else {
+      setTotalExpense(0);
+    }
+  }, [categories]);
 
   return (
     <ExpenseContext.Provider
@@ -106,6 +127,7 @@ function ExpenseProvider({ children }) {
         setIsSubmitExpense,
         expenseRef,
         handleSetExpCat,
+        totalExpense,
       }}
     >
       {children}
