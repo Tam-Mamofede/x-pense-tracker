@@ -20,10 +20,18 @@ function Budget() {
         )}
         <thead className="w-full bg-[#e3f0af] text-[#1f4529]">
           <tr>
-            <th className="border border-[#1f4529] px-6 py-2">Category</th>
-            <th className="border border-[#1f4529] px-6 py-2">Budget</th>
-            <th className="border border-[#1f4529] px-6 py-2">Expense</th>
-            <th className="border border-[#1f4529] px-6 py-2">Remaining</th>
+            <th className="border border-[#1f4529] px-6 py-2 text-[10px] lg:text-[14px]">
+              Category
+            </th>
+            <th className="border border-[#1f4529] px-6 py-2 text-[10px] lg:text-[14px]">
+              Budget
+            </th>
+            <th className="border border-[#1f4529] px-6 py-2 text-[10px] lg:text-[14px]">
+              Expense
+            </th>
+            <th className="border border-[#1f4529] px-6 py-2 text-[10px] lg:text-[14px]">
+              Remaining
+            </th>
           </tr>
         </thead>
         <tbody className={darkmode ? "text-[#e3f0af]" : null}>
@@ -31,18 +39,18 @@ function Budget() {
             <tr key={categoryItem.id}>
               <td
                 onClick={handleToggleDelBtn}
-                className="break-words border border-[#1f4529] px-4 py-2 hover:cursor-pointer"
+                className="break-words border border-[#1f4529] px-4 py-2 text-[10px] hover:cursor-pointer lg:text-[14px]"
               >
                 {categoryItem.Category}
               </td>
-              <td className="border border-[#1f4529] px-4 py-2">
+              <td className="border border-[#1f4529] px-4 py-2 text-[10px] lg:text-[14px]">
                 {categoryItem.Amount}
               </td>
-              <td className="border border-[#1f4529] px-4 py-2">
+              <td className="border border-[#1f4529] px-4 py-2 text-[10px] lg:text-[14px]">
                 {categoryItem.Expense}
               </td>
               <td
-                className={`border border-[#1f4529] px-4 py-2 ${
+                className={`border border-[#1f4529] px-4 py-2 text-[10px] lg:text-[14px] ${
                   categoryItem.Amount < categoryItem.Expense
                     ? darkmode
                       ? "bg-[#310808] text-white"
@@ -55,7 +63,7 @@ function Budget() {
               {showButton === true && (
                 <td
                   key={`delBtn: ${categoryItem.id}`}
-                  className="border border-[#1f4529] bg-red-800 px-4 py-2 text-white hover:cursor-pointer"
+                  className="border border-[#1f4529] bg-red-800 px-4 py-2 text-[10px] text-white hover:cursor-pointer lg:text-[14px]"
                 >
                   <button onClick={() => handleDeleteEntry(categoryItem.id)}>
                     Delete Entry

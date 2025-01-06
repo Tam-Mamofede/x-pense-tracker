@@ -12,16 +12,16 @@ import Loader from "../components/Loader";
 function Dashboard() {
   const { selectedMonth, isLoading, darkmode } = useAuth();
 
-  const { categories, popupOpen, setPopupOpen, handleChangeMonth } =
-    useBudget();
-
   const {
-    showExpense,
-    expenseRef,
-    expenseCategory,
-    amountValue,
-    handleShowExpense,
-  } = useExpense();
+    categories,
+    popupOpen,
+    setPopupOpen,
+    handleChangeMonth,
+    totalBudget,
+  } = useBudget();
+
+  const { showExpense, expenseRef, handleShowExpense, totalExpense } =
+    useExpense();
 
   const budgetRef = useRef(null);
   const buttonStyles =
@@ -52,6 +52,16 @@ function Dashboard() {
           <>
             <BudgetChart />
             <Budget />
+            <div
+              className={`flex flex-col justify-center space-y-2 pt-4 text-center text-[12px] lg:text-[14px] ${darkmode ? "text-[#e3f0af]" : "text-[#122717]"}`}
+            >
+              <p>
+                Total budget for {selectedMonth} is {totalBudget}
+              </p>
+              <p>
+                You have spent a total of {totalExpense} this {selectedMonth}
+              </p>
+            </div>
 
             <div className="mt-6 flex flex-col items-center space-y-4">
               {categories.length <= 0 ? (
@@ -85,16 +95,7 @@ function Dashboard() {
             </div>
           </div>
         )}
-        <>
-          {showExpense && <Expense ref={expenseRef} />}
-          {expenseCategory && (
-            <div className="mt-4">
-              <p>
-                You have spent {amountValue} for {expenseCategory}
-              </p>
-            </div>
-          )}
-        </>
+        <>{showExpense && <Expense ref={expenseRef} />}</>
       </div>
     </div>
   );
