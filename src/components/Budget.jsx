@@ -12,24 +12,24 @@ function Budget() {
       <table className="w-4/5 table-fixed border-collapse flex-col items-center justify-center rounded-lg border">
         {!categories && <p>Loading categories...</p>}
         {categories.length === 0 && (
-          <div className="flex h-fit w-4/5 flex-col items-center justify-center space-y-2 p-4">
-            <p className="text-center font-extrabold text-[#1f4529]">
-              No categories found.
-            </p>
-          </div>
+          <p
+            className={`flex h-fit w-fit self-center p-4 text-left text-[12px] font-extrabold ${darkmode ? "text-[#e3f0af]" : "text-[#1f4529]"}`}
+          >
+            No categories found.
+          </p>
         )}
         <thead className="w-full bg-[#e3f0af] text-[#1f4529]">
           <tr>
-            <th className="border border-[#1f4529] px-6 py-2 text-[10px] lg:text-[14px]">
+            <th className="border border-[#1f4529] px-2 py-2 text-[10px] lg:text-[14px]">
               Category
             </th>
-            <th className="border border-[#1f4529] px-6 py-2 text-[10px] lg:text-[14px]">
+            <th className="border border-[#1f4529] px-2 py-2 text-[10px] lg:text-[14px]">
               Budget
             </th>
-            <th className="border border-[#1f4529] px-6 py-2 text-[10px] lg:text-[14px]">
+            <th className="border border-[#1f4529] px-2 py-2 text-[10px] lg:text-[14px]">
               Expense
             </th>
-            <th className="border border-[#1f4529] px-6 py-2 text-[10px] lg:text-[14px]">
+            <th className="border border-[#1f4529] px-2 py-2 text-[10px] lg:text-[14px]">
               Remaining
             </th>
           </tr>

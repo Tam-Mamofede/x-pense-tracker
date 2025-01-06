@@ -42,7 +42,7 @@ function Dashboard() {
 
   return (
     <div
-      className={`scrollable-container relative flex flex-col overflow-hidden pb-8 ${darkmode ? "bg-[#122717]" : "bg-[#fffcf9]"}`}
+      className={`scrollable-container relative flex h-screen flex-col overflow-hidden pb-8 ${darkmode ? "bg-[#122717]" : "bg-[#fffcf9]"}`}
     >
       {isLoading ? <Loader /> : null}
       <Navigation />

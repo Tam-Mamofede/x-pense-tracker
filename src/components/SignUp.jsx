@@ -90,13 +90,13 @@ function SignUp() {
                 <div className="flex flex-row justify-between">
                   <button
                     onClick={createAccount}
-                    className="w-fit rounded-2xl bg-[#1f4529] px-4 py-2 text-center text-[#e3f0af]"
+                    className="w-fit rounded-2xl bg-[#1f4529] px-4 py-2 text-center text-sm text-[#e3f0af] lg:text-[16px]"
                   >
                     Sign up
                   </button>
                   <button
                     onClick={createAccountWithGoogle}
-                    className="w-fit rounded-2xl bg-[#e3f0af] px-4 py-2 text-center"
+                    className="w-fit rounded-2xl bg-[#e3f0af] px-4 py-2 text-center text-sm lg:text-[16px]"
                   >
                     Google
                   </button>

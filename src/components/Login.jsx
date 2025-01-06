@@ -83,13 +83,13 @@ function Login() {
           <div className="flex flex-row justify-between">
             <button
               onClick={logIn}
-              className="rounded-2xl bg-[#1f4529] px-4 py-2 text-center text-[#e3f0af]"
+              className="rounded-2xl bg-[#1f4529] px-4 py-2 text-center text-sm text-[#e3f0af] lg:text-[16px]"
             >
               Log in
             </button>
             <button
               onClick={createAccountWithGoogle}
-              className="rounded-2xl bg-[#e3f0af] px-4 py-2 text-center"
+              className="rounded-2xl bg-[#e3f0af] px-4 py-2 text-center text-sm lg:text-[16px]"
             >
               Log in with Google
             </button>
