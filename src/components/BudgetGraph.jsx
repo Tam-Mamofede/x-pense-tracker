@@ -183,12 +183,12 @@ function LineChart() {
     <div className="mb-4 flex flex-col p-4">
       <div className="mt-4">
         <h2
-          className={`whitespace-normal text-center text-xl font-extrabold ${darkmode ? "text-[#e3f0af]" : "text-[#1f4529]"}`}
+          className={`whitespace-normal text-center text-[16px] font-extrabold lg:text-xl ${darkmode ? "text-[#e3f0af]" : "text-[#1f4529]"}`}
         >
           Budget for the month of {selectedMonth}
         </h2>
       </div>
-      <div className="h-[300px] w-[420px] p-4 lg:h-[500px] lg:w-[650px]">
+      <div className="h-[300px] w-[380px] p-2 lg:h-[500px] lg:w-[650px]">
         <Line data={chartData} options={options} />
       </div>
     </div>
