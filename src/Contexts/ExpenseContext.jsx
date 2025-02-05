@@ -39,7 +39,6 @@ function ExpenseProvider({ children }) {
 
   const handleSetExpCat = (e) => {
     const value = e.target.value;
-    // Capitalize the first letter
     const capitalizedValue =
       value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
     setExpenseCategory(capitalizedValue);
@@ -59,7 +58,6 @@ function ExpenseProvider({ children }) {
         (cat) => cat.Category === expenseCategory,
       );
 
-      // If no category found, show error
       if (!category) {
         setAlertMessage(
           "You have not set a budget for this category, so we cannot deduct your expense.",
@@ -83,7 +81,7 @@ function ExpenseProvider({ children }) {
       }
 
       const { Amount = 0, Expense = 0 } = docSnap.data();
-      const newAmount = Amount - Number(expenseAmount); // Prevent negative amounts
+      const newAmount = Amount - Number(expenseAmount);
       const newExpense = Expense + Number(expenseAmount);
 
       await updateDoc(docRef, { Remaining: newAmount, Expense: newExpense });

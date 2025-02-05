@@ -43,31 +43,28 @@ function AuthProvider({ children }) {
       setIsAuthenticated(true);
       const newUser = userCredential.user;
 
-      //try to store it in Firestore
       setDoc(doc(db, "users", newUser.uid), {
         email: newUser.email,
         name: userName,
-        password: password, //these can be increased for any future inputs
+        password: password,
       });
 
       setUser(newUser);
       navigate("/dashboard");
-      const userDocRef = doc(db, "users", newUser.uid); //getting the newly created document under ' users' collection
+      const userDocRef = doc(db, "users", newUser.uid);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
-        const userData = userDoc.data(); // get user data from new document
+        const userData = userDoc.data();
         console.log(userData);
       }
 
-      setAlertMessage("Sign up successful"); // proof
+      setAlertMessage("Sign up successful");
     } catch (err) {
       console.error(err);
     } finally {
       setIsLoading(false);
     }
   };
-
-  //sign in with google account
 
   const createAccountWithGoogle = async () => {
     setIsLoading(true);
@@ -78,7 +75,7 @@ function AuthProvider({ children }) {
       {
         inputedMonth ? setSelectedMonth(inputedMonth) : "";
       }
-      //try to store it in Firestore
+
       setDoc(doc(db, "users", newUser.uid), {
         email: newUser.email,
         name: userName,
@@ -87,10 +84,10 @@ function AuthProvider({ children }) {
       setUser(newUser);
       setIsAuthenticated(true);
       navigate("/dashboard");
-      const userDocRef = doc(db, "users", newUser.uid); //getting the newly created document under ' users' collection
+      const userDocRef = doc(db, "users", newUser.uid);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
-        const userData = userDoc.data(); // get user data from new document
+        const userData = userDoc.data();
         console.log(userData);
       }
     } catch (err) {
@@ -140,7 +137,6 @@ function AuthProvider({ children }) {
       setUser(auth.currentUser);
       const inputedMonth = prompt("Which month do you want to see?");
       if (inputedMonth) {
-        // Capitalize the first letter and make the rest lowercase
         const formattedMonth =
           inputedMonth.charAt(0).toUpperCase() +
           inputedMonth.slice(1).toLowerCase();
@@ -206,7 +202,7 @@ function AuthProvider({ children }) {
         {/* Render the Global Alert */}
         <Alert
           message={alertMessage}
-          clearMessage={() => setAlertMessage("")} // Clear message function
+          clearMessage={() => setAlertMessage("")}
         />
         {children}
       </AuthContext.Provider>

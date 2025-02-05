@@ -51,7 +51,7 @@ function LineChart() {
           },
           {
             label: "Expenses",
-            data: exAmt, // Use the expenses array here
+            data: exAmt,
             borderColor: "red",
             backgroundColor: "rgba(255, 0, 0, 0.2)",
             borderWidth: 2,
@@ -129,8 +129,6 @@ function LineChart() {
     const getExpenses = async () => {
       try {
         if (!categories?.length) return;
-
-        // Loop through each category to fetch its expense
         const expenses = await Promise.all(
           categories.map(async (cat) => {
             const userDocRef = doc(db, "users", user.uid);
@@ -144,12 +142,12 @@ function LineChart() {
               return docSnap.data().Expense;
             } else {
               console.warn(`No expense found for category: ${cat.Category}`);
-              return 0; // Default value if no document
+              return 0;
             }
           }),
         );
 
-        setExAmt(expenses); // Set expenses as an array
+        setExAmt(expenses);
       } catch (error) {
         console.error("Error fetching expenses:", error);
       }

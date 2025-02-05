@@ -100,7 +100,6 @@ function BudgetProvider({ children }) {
 
   const handleMonthInput = (e) => {
     const value = e.target.value;
-    // Capitalize the first letter
     const capitalizedValue =
       value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
     setMonth(capitalizedValue);
@@ -135,7 +134,7 @@ function BudgetProvider({ children }) {
         createdAt: new Date(),
         Category: category,
         Amount: Number(amount),
-      }); // Refresh the list after setting the budget
+      });
 
       setIsBudget(true);
       console.log("Budgets document created successfully!");
@@ -152,7 +151,7 @@ function BudgetProvider({ children }) {
 
   //////////////////////////////////////////////////
   const debounce = (func, delay) => {
-    let timer; // Timer to track the delay
+    let timer;
     return (...args) => {
       clearTimeout(timer); // Clear the existing timer if the function is called again
       timer = setTimeout(() => func(...args), delay); // Set a new timer to execute the function after the delay
@@ -162,7 +161,7 @@ function BudgetProvider({ children }) {
 
   useEffect(() => {
     if (user && user.uid && selectedMonth) {
-      debouncedFetchCategories(user.uid); // Use the debounced version
+      debouncedFetchCategories(user.uid);
     }
   }, [selectedMonth, user]);
 

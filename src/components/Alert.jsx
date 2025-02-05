@@ -6,12 +6,12 @@ function Alert({ message, clearMessage }) {
 
   useEffect(() => {
     if (message) {
-      setIsVisible(true); // Show alert when there's a message
+      setIsVisible(true);
       const timer = setTimeout(() => {
-        setIsVisible(false); // Hide after 5 seconds
-        clearMessage(); // Clear the message from state
+        setIsVisible(false);
+        clearMessage();
       }, 1000);
-      return () => clearTimeout(timer); // Cleanup timer on unmount
+      return () => clearTimeout(timer);
     }
   }, [message, clearMessage]);
 
